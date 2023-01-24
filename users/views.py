@@ -23,6 +23,8 @@ from users.models import Address
 from users.serializers import AddressSerializer
 
 # Get user tokens > refresh_token & access_token
+
+
 def get_user_tokens(user):
     refresh = tokens.RefreshToken.for_user(user)
     return {
@@ -31,6 +33,8 @@ def get_user_tokens(user):
     }
 
 # User authentication with email
+
+
 @rest_decorators.api_view(["POST"])
 @rest_decorators.permission_classes([])
 def loginView(request):
