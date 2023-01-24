@@ -36,7 +36,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 
 ALLOWED_HOSTS = [
-    'https://8000-cgauci87-nrootsdrfapi-5yls6ei40in.ws-eu83.gitpod.io']
+    '8000-cgauci87-nrootsdrfapi-5yls6ei40in.ws-eu83.gitpod.io']
 
 CORS_ALLOW_CREDENTIALS = True
 
