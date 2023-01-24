@@ -19,6 +19,8 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
 from users import serializers, models
+from users.models import Address
+from users.serializers import AddressSerializer
 
 
 def get_user_tokens(user):
