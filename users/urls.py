@@ -5,7 +5,7 @@ from users.views import AddressViewSet
 
 app_name = "users"
 
-router = DefaultRouter()
+router = DefaultRouter() # DefaultRouter includes a default API root view
 router.register('user/profile/addresses', views.AddressViewSet)
 
 urlpatterns = [

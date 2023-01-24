@@ -116,10 +116,13 @@ def logoutView(request):
     except:  # if token not found or doesn't match , raise parse error exception
         raise rest_exceptions.ParseError("Invalid token")
 
-# Cookie Token Refresh Serializer 
+# Cookie Token Refresh Serializer
+
+
 class CookieTokenRefreshSerializer(jwt_serializers.TokenRefreshSerializer):
     refresh = None
     # Validation
+
     def validate(self, attrs):
         attrs['refresh'] = self.context['request'].COOKIES.get('refresh')
         if attrs['refresh']:
@@ -128,10 +131,13 @@ class CookieTokenRefreshSerializer(jwt_serializers.TokenRefreshSerializer):
             raise jwt_exceptions.InvalidToken(
                 'No valid token found in cookie \'refresh\'')
 
-# Cookie Token Refresh View 
+# Cookie Token Refresh View
+
+
 class CookieTokenRefreshView(jwt_views.TokenRefreshView):
     serializer_class = CookieTokenRefreshSerializer
     # Renew access token using the refresh token
+
     def finalize_response(self, request, response, *args, **kwargs):
         if response.data.get("refresh"):
             response.set_cookie(
@@ -147,27 +153,34 @@ class CookieTokenRefreshView(jwt_views.TokenRefreshView):
         response["X-CSRFToken"] = request.COOKIES.get("csrftoken")
         return super().finalize_response(request, response, *args, **kwargs)
 
+# userView for Account Model
+
 
 @rest_decorators.api_view(["GET"])
 @rest_decorators.permission_classes([rest_permissions.IsAuthenticated])
 def userView(request):
-    try:
+    try:  # Get objects from the account of current logged in user
         user = models.Account.objects.get(id=request.user.id)
     except models.Account.DoesNotExist:
+        # if account does not exists, then raise exception 404
         return response.Response(status_code=404)
-
+        #
     serializer = serializers.AccountSerializer(user)
+    # if response is successful, return serialized data
     return response.Response(serializer.data)
+
+# userProfileView for Account Model
 
 
 @rest_decorators.api_view(["GET"])
 @rest_decorators.permission_classes([rest_permissions.IsAuthenticatedOrReadOnly])
 def userProfileView(request):
-    try:
+    try:  # Get objects from the account of current logged in user
         user = models.Account.objects.get(id=request.user.id)
     except models.Account.DoesNotExist:
+        # if account does not exists, then raise exception 404
         return response.Response(status_code=404)
-
+     # if response is successful, return serialized data
     serializer = serializers.AccountSerializer(user)
     return response.Response(serializer.data)
 
