@@ -116,10 +116,10 @@ def logoutView(request):
     except:  # if token not found or doesn't match , raise parse error exception
         raise rest_exceptions.ParseError("Invalid token")
 
-
+# Cookie Token Refresh Serializer 
 class CookieTokenRefreshSerializer(jwt_serializers.TokenRefreshSerializer):
     refresh = None
-
+    # Validation
     def validate(self, attrs):
         attrs['refresh'] = self.context['request'].COOKIES.get('refresh')
         if attrs['refresh']:
@@ -128,10 +128,10 @@ class CookieTokenRefreshSerializer(jwt_serializers.TokenRefreshSerializer):
             raise jwt_exceptions.InvalidToken(
                 'No valid token found in cookie \'refresh\'')
 
-
+# Cookie Token Refresh View 
 class CookieTokenRefreshView(jwt_views.TokenRefreshView):
     serializer_class = CookieTokenRefreshSerializer
-
+    # Renew access token using the refresh token
     def finalize_response(self, request, response, *args, **kwargs):
         if response.data.get("refresh"):
             response.set_cookie(
