@@ -10,7 +10,7 @@ ADDRESS_CHOICES = (
     ('S', 'Shipping'),
 )
 
-
+# AccountManager Model for user and admin 
 class AccountManager(BaseUserManager):
     def create_user(self, first_name, last_name, email, password=None, **kwargs):
 
@@ -47,7 +47,7 @@ class AccountManager(BaseUserManager):
         user.save(using=self._db)
         return
 
-
+# Account Model
 class Account(AbstractBaseUser):
     email = models.EmailField(null=False, blank=False, unique=True)
     first_name = models.CharField(max_length=30, blank=False, null=False)
@@ -61,14 +61,14 @@ class Account(AbstractBaseUser):
     reset_password_token = models.CharField(
         max_length=100, null=True, blank=True)
 
-    objects = AccountManager()
+    objects = AccountManager() # Reference to the objects of the Account Manager (see above)
 
-    USERNAME_FIELD = "email"
+    USERNAME_FIELD = "email" # The email field is being used as the unique identifier
 
-    def has_perm(self, perm, obj=None):
+    def has_perm(self, perm, obj=None): # Returns True if the user has the named permission.  If obj is provided, the permission needs to be checked against a specific object instance.
         return True
 
-    def has_module_perms(self, app_label):
+    def has_module_perms(self, app_label): # Returns True if the user has permission to access models in the given app.
         return True
 
 
