@@ -22,7 +22,7 @@ from users import serializers, models
 from users.models import Address
 from users.serializers import AddressSerializer
 
-
+# Get user tokens > refresh_token & access_token
 def get_user_tokens(user):
     refresh = tokens.RefreshToken.for_user(user)
     return {
@@ -30,13 +30,13 @@ def get_user_tokens(user):
         "access_token": str(refresh.access_token)
     }
 
-
+# User authentication with email
 @rest_decorators.api_view(["POST"])
 @rest_decorators.permission_classes([])
 def loginView(request):
     serializer = serializers.LoginSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
-
+    # Validation
     email = serializer.validated_data["email"]
     password = serializer.validated_data["password"]
 
@@ -45,6 +45,7 @@ def loginView(request):
     if user is not None:
         tokens = get_user_tokens(user)
         res = response.Response()
+        # Set cookies upon successful response
         res.set_cookie(
             key=settings.SIMPLE_JWT['AUTH_COOKIE'],
             value=tokens["access_token"],
@@ -53,7 +54,6 @@ def loginView(request):
             httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
             samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
         )
-
         res.set_cookie(
             key=settings.SIMPLE_JWT['AUTH_COOKIE_REFRESH'],
             value=tokens["refresh_token"],
@@ -66,6 +66,7 @@ def loginView(request):
         res.data = tokens
         res["X-CSRFToken"] = csrf.get_token(request)
         return res
+    # raise exception if user has entered incorrect email address or incorrect password or both
     raise rest_exceptions.AuthenticationFailed(
         "Email or Password is incorrect!")
 

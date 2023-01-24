@@ -196,6 +196,8 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+# Simple JWT - JSON Web Token authentication
+# https://django-rest-framework-simplejwt.readthedocs.io/en/latest/getting_started.html
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
@@ -245,8 +247,7 @@ SIMPLE_JWT = {
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',  # For now
-        # 'users.authenticate.CustomAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 
     "DEFAULT_PERMISSION_CLASSES": [
