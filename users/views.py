@@ -93,16 +93,18 @@ def registerView(request):
     # return exception if failed
     return rest_exceptions.AuthenticationFailed("Invalid credentials!")
 
+# Logout function
+
 
 @rest_decorators.api_view(['GET'])
 @rest_decorators.permission_classes([rest_permissions.IsAuthenticated])
 def logoutView(request):
-    try:
+    try:  # get token cookies
         refreshToken = request.COOKIES.get(
             settings.SIMPLE_JWT['AUTH_COOKIE_REFRESH'])
         token = tokens.RefreshToken(refreshToken)
         token.blacklist()
-
+        # delete token cookies upon successful response on logout
         res = response.Response()
         res.delete_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'])
         res.delete_cookie(settings.SIMPLE_JWT['AUTH_COOKIE_REFRESH'])
@@ -111,7 +113,7 @@ def logoutView(request):
         res["X-CSRFToken"] = None
 
         return res
-    except:
+    except:  # if token not found or doesn't match , raise parse error exception
         raise rest_exceptions.ParseError("Invalid token")
 
 
