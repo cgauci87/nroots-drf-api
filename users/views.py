@@ -80,7 +80,7 @@ def loginView(request):
 @rest_decorators.api_view(["POST"])
 @rest_decorators.permission_classes([])
 def registerView(request):
-    #  deserializing data; call is_valid() before attempting to access the validated data
+    #  deserializing data - call is_valid() before attempting to access the validated data
     serializer = serializers.RegistrationSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
 
