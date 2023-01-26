@@ -88,26 +88,27 @@ class Order(models.Model):
         if not self.order_id:
             self.order_id = self.generate_order_id()
         super().save(*args, **kwargs)
-
+    # generate string representations of the objects
     def __str__(self):
         return self.order_id
 
+# Item Model - used mainly to showcase products and details to the end-user , in checkout process and to manage products in CMS
 
 class Item(models.Model):
     """ Product Model """
-    title = models.CharField(max_length=100)  # included in FE > Products.js
-    description = models.TextField()  # included in FE > Products.js
-    price = models.FloatField()  # included in FE > Products.js
-    comparePrice = models.FloatField()  # included in FE > Products.js
-    uploadedImg = models.ImageField()  # included in FE > Products.js
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    price = models.FloatField()
+    comparePrice = models.FloatField()
+    uploadedImg = models.ImageField()
     category = models.CharField(
-        choices=CATEGORY_CHOICES, max_length=20, blank=True, null=True)
+        choices=CATEGORY_CHOICES, max_length=20, blank=True, null=True) # including CATEGORY_CHOICES
     tag = models.CharField(choices=TAG_CHOICES,
-                           max_length=20, blank=True, null=True)
+                           max_length=20, blank=True, null=True)  # including TAG_CHOICES
     status = models.CharField(max_length=20,
-                              choices=STATUS_CHOICES, default='Order Created', null=True)
+                              choices=STATUS_CHOICES, default='Order Created', null=True)  # including STATUS_CHOICES
 
-
+# generate string representations of the objects
 def __str__(self):
     return f'{self.id} {self.title}'
 
