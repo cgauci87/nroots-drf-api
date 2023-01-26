@@ -19,4 +19,4 @@ urlpatterns = [
     path('reset-password', views.ChangeCurrentPasswordView.as_view()),
 ]
 
-urlpatterns += router.urls
+urlpatterns += router.urls # append router.urls to the above list of views.
