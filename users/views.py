@@ -22,7 +22,7 @@ from users import serializers, models
 from users.models import Address
 from users.serializers import AddressSerializer
 
-# Get user tokens > refresh_token & access_token
+# Get user tokens - refresh_token & access_token
 
 
 def get_user_tokens(user):
