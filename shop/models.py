@@ -112,12 +112,14 @@ class Item(models.Model):
 def __str__(self):
     return f'{self.id} {self.title}'
 
-
+# OrderItem Model - used mainly to showcase order and details of order and associated items in the order to the admin and user , in checkout process and to manage orders in CMS
 class OrderItem(models.Model):
     order = models.ForeignKey(
-        Order, on_delete=models.CASCADE, null=True, related_name='items')
+        Order, on_delete=models.CASCADE, null=True, related_name='items') # linked to Order by means of the foreign key,  set a related_name argument on the relationship
     item_id = models.ForeignKey(
         Item, on_delete=models.SET_NULL, null=True, related_name='orders')
     price = models.FloatField()
     qty = models.IntegerField()
-    total = models.FloatField(default=0)
+    total = models.FloatField(default=0.00)
+
+# set on_delete=models.CASCADE on models which has ForeignKey field, so when the referenced object is deleted, also delete the objects that have references to it
