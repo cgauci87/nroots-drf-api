@@ -10,9 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+
 from datetime import timedelta
 from pathlib import Path
+
 import os
+import dj_database_url
 
 if os.path.exists('env.py'):
     import env
@@ -36,7 +39,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 
 ALLOWED_HOSTS = [
-    '8000-cgauci87-nrootsdrfapi-5yls6ei40in.ws-eu84.gitpod.io']
+    '8000-cgauci87-nrootsdrfapi-5yls6ei40in.ws-eu84.gitpod.io', 'nroots-drf-api.herokuapp.com',]
+
+CORS_ALLOWED_ORIGINS = ['https://8000-cgauci87-nrootsdrfapi-5yls6ei40in.ws-eu84.gitpod.io',
+                        'https://nroots-drf-api.herokuapp.com',]
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -254,7 +260,11 @@ REST_FRAMEWORK = {
 
     "DEFAULT_PERMISSION_CLASSES": [
         'rest_framework.permissions.AllowAny',
-    ]
+    ],
+    "DEFAULT_PAGINATION_CLASS":
+        'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+    'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",
 }
 
 
