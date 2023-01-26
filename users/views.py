@@ -184,34 +184,34 @@ def userProfileView(request):
     serializer = serializers.AccountSerializer(user)
     return response.Response(serializer.data)
 
-
+# ForgotPassword - API View
 class ForgotPassword(APIView):
     def post(self, request, *args, **kwargs):
         FRONTEND_URL = "https://nroots-react.herokuapp.com"
         user = models.Account.objects.filter(
-            email=request.data.get("email")).first()
+            email=request.data.get("email")).first() # get email from the input of the user
         if user:
-            token = str(uuid.uuid4().hex)
+            token = str(uuid.uuid4().hex) # generate token with uuid
             token = token.replace("=", "").replace("&", "")
 
-            user.reset_password_token = token
+            user.reset_password_token = token # set the token
             user.save()
-            url = FRONTEND_URL + "/auth/reset-password?reset_token=" + token
+            url = FRONTEND_URL + "/auth/reset-password?reset_token=" + token # parse the url with the reset_token
 
             html_message = render_to_string(
-                'reset_password.html', {'url': url})
-            plain_message = strip_tags(html_message)
+                'reset_password.html', {'url': url}) # loads the template
+            plain_message = strip_tags(html_message) # strip/remove HTML tags from an existing string
 
             try:
                 mail.send_mail("NRoots - Reset Your Account Password", plain_message, EMAIL_HOST_USER, [
-                               user.email], html_message=html_message)
+                               user.email], html_message=html_message) # loads the text file which contain the subject line
             except Exception as e:
-                print(e)
+                print(e) # print exception if email delivery not successful
 
             print(url)
             response = {
                 'message': 'A password link has been sent to the registered email'}
-        return JsonResponse(response)
+        return JsonResponse(response) # return success response if successful
 
     def patch(self, request, *args, **kwargs):
         if not "reset_token" in request.data:

@@ -106,7 +106,7 @@ class OrderSerializer(serializers.ModelSerializer):
         # SEND ORDER SUMMARY EMAIL HERE (triggered automatically upon order submission)
 
         html_message = render_to_string('order_summary.html', {'order': order}) # loads the template
-        plain_message = strip_tags(html_message) # to strip/remove HTML tags from an existing string
+        plain_message = strip_tags(html_message) # strip/remove HTML tags from an existing string
         subject = render_to_string(
             'order_summary_subject.txt', 
             {'order': order}) # loads the text file which contain the subject line
