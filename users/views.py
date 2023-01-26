@@ -270,7 +270,7 @@ class AddressViewSet(ModelViewSet):
         return queryset
 
     def query_set(self, request, *args, **kwargs):
-        user = User.objects.filter(email=current_user.email)
-        queryset = Address.objects.filter(user=self.request.user)
-        serializer = AddressSerializer(queryset, many=True)
-        return Response(serializer.data)
+        user = User.objects.filter(email=current_user.email) # filter by current user email object
+        queryset = Address.objects.filter(user=self.request.user) # query only the address objects of the current user
+        serializer = AddressSerializer(queryset, many=True) # a nested representation of list of items
+        return Response(serializer.data) # return response from serialized data
