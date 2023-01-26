@@ -39,8 +39,8 @@ def get_user_tokens(user):
 @rest_decorators.permission_classes([])
 def loginView(request):
     serializer = serializers.LoginSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    # Validation
+    serializer.is_valid(raise_exception=True)  # Perform validation
+
     email = serializer.validated_data["email"]
     password = serializer.validated_data["password"]
 
