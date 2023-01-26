@@ -69,33 +69,34 @@ class OrderItemSerializer(serializers.ModelSerializer):
         fields = ['item_id', 'price', 'qty', 'total', 'title']
 
 
+# OrderSerializer for Order model
 class OrderSerializer(serializers.ModelSerializer):
 
-    items = OrderItemSerializer(many=True, required=False)
+    items = OrderItemSerializer(many=True, required=False) # a nested representation of list of items
     checkout_type = serializers.CharField(required=False)
 
     created_at = serializers.DateTimeField(
-        format='%d/%m/%y %H:%M', required=False)
+        format='%d/%m/%y %H:%M', required=False) # timstamp in human readable format
 
-    full_name = serializers.CharField(read_only=True)
+    full_name = serializers.CharField(read_only=True) # visible field, but not editable by the user
 
-    def create(self, validated_data):
-        items = validated_data.pop('items')
+    def create(self, validated_data): 
+        items = validated_data.pop('items') # .pop searches for 'items' and returns and removes it if it is found, otherwise an exception is thrown.
         order = super().create(validated_data)
         qty = 0
-        total = Decimal(0)
+        total = Decimal(0) # create a Decimal from decimal import *
 
-        for item_id in items:
+        for item_id in items: # a nested field on the serializer class (writable nested serialization)
             item_id['item_id'] = item_id['item_id'].pk
 
             item_id = OrderItemSerializer(data=item_id)
             if not item_id.is_valid():
                 print(item_id.errors)
-                raise serializers.ValidationError("Invalid item")
+                raise serializers.ValidationError("Invalid item") # raise validation error if item_id is not valid
             item_id = item_id.save()
             item_id.order = order
-            item_id.total = item_id.price * item_id.qty
-            item_id.save()
+            item_id.total = item_id.price * item_id.qty # calculate total
+            item_id.save() 
             total += item_id.total
             qty += item_id.qty
         order.qty = qty
