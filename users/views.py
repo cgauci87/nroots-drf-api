@@ -136,7 +136,7 @@ class CookieTokenRefreshSerializer(jwt_serializers.TokenRefreshSerializer):
 
 class CookieTokenRefreshView(jwt_views.TokenRefreshView):
     serializer_class = CookieTokenRefreshSerializer
-    # If resoponse would be "refresh" -  Get refresh cookie and set values so to "refresh" the access token.
+    # If response would have the refresh object -  set values so to "refresh" the access token.
 
     def finalize_response(self, request, response, *args, **kwargs):
         if response.data.get("refresh"):

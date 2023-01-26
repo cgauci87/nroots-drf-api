@@ -2,23 +2,23 @@ from rest_framework import serializers
 from django.conf import settings
 from users.models import Account, Address
 
-
+# Registration Serializer for Model Account
 class RegistrationSerializer(serializers.ModelSerializer):
 
-    password2 = serializers.CharField(style={"input_type": "password"})
+    password2 = serializers.CharField(style={"input_type": "password"}) # set the input type on password2 field as password for hidden style
 
     class Meta:
         model = Account
         fields = ("first_name", "last_name", "email", "password", "password2")
         read_only_fields = ("is_superuser", "is_admin",
-                            "is_staff", "is_active", "created_at", "updated_at")
-        extra_kwargs = {
+                            "is_staff", "is_active", "created_at", "updated_at") # listing the said fields as read only, this would prevent fields from being changed in an update
+        extra_kwargs = { # Listing password and password2 fields in the additional keyword arguments
             "password": {"write_only": True},
             "password2": {"write_only": True}
         }
 
-    def save(self):
-        user = Account(
+    def save(self): # create a new instance.
+        user = Account( # returns the validated incoming data
             first_name=self.validated_data["first_name"],
             last_name=self.validated_data["last_name"],
             email=self.validated_data["email"],
@@ -27,12 +27,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
         password = self.validated_data["password"]
         password2 = self.validated_data["password2"]
 
-        if password != password2:
+        if password != password2: # if both fields does not match, then raise a validation error
             raise serializers.ValidationError(
                 {"password": "Passwords do not match!"})
 
-        user.set_password(password)
-        user.save()
+        user.set_password(password) # pass to set_password method, creates a hashed password
+        user.save() # save the value in database
 
         return user
 
