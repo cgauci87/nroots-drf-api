@@ -23,7 +23,7 @@ class TagsView(View):
         payload = {'tags': tags}
         return HttpResponse(json.dumps(payload), content_type='application/json') # return the payload according to what values specified in the TAG_CHOICES
 
-
+# StatusesView for STATUS_CHOICES
 class StatusesView(View):
     def get(self, *args, **kwargs):
         statuses = []
@@ -31,4 +31,4 @@ class StatusesView(View):
             statuses.append(s)
 
         payload = {'statuses': statuses}
-        return HttpResponse(json.dumps(payload), content_type='application/json')
+        return HttpResponse(json.dumps(payload), content_type='application/json') # return the payload according to what values specified in the STATUS_CHOICES
