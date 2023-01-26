@@ -11,9 +11,9 @@ class CategoriesView(View):
             categories.append(c)
 
         payload = {'categories': categories}
-        return HttpResponse(json.dumps(payload), content_type='application/json')
+        return HttpResponse(json.dumps(payload), content_type='application/json') # return the payload according to what values specified in the CATEGORY_CHOICES
 
-
+# TagsView for TAG_CHOICES
 class TagsView(View):
     def get(self, *args, **kwargs):
         tags = []
@@ -21,7 +21,7 @@ class TagsView(View):
             tags.append(t)
 
         payload = {'tags': tags}
-        return HttpResponse(json.dumps(payload), content_type='application/json')
+        return HttpResponse(json.dumps(payload), content_type='application/json') # return the payload according to what values specified in the TAG_CHOICES
 
 
 class StatusesView(View):
