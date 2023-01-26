@@ -36,21 +36,21 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
         return user
 
-
+# Login Serializer for Model Account
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(
-        style={"input_type": "password"}, write_only=True)
+        style={"input_type": "password"}, write_only=True)  # set the input type on password2 field as password for hidden style
 
 
 class AccountSerializer(serializers.ModelSerializer):
-    is_staff = serializers.BooleanField(read_only=True)
+    is_staff = serializers.BooleanField(read_only=True)  # listing the said fields as read only, this would prevent fields from being changed in an update
     is_active = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Account
         fields = ("id", "first_name", "last_name",
-                  "email", 'is_staff', 'is_active')
+                  "email", 'is_staff', 'is_active') # listing the said fields as a subset of the default fields to be used in a model serializer
 
 
 class AddressSerializer(serializers.ModelSerializer):
