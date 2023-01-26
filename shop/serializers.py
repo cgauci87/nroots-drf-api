@@ -1,7 +1,5 @@
 from rest_framework import serializers
 from shop.models import Item, Order, OrderItem
-from users.models import Account
-from nroots_drf_api.serializers import ItemSerializer
 
 from django.core.mail import send_mail
 from nroots_drf_api.settings import (
@@ -12,7 +10,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
 
-# Product Serializer
+# Base64ImageField Serializer - decode image file - mainly used to upload product images
 
 class Base64ImageField(serializers.ImageField):
 
@@ -21,25 +19,24 @@ class Base64ImageField(serializers.ImageField):
         import base64
         import six
         import uuid
-
+        # Check if this is a base64 string
         if isinstance(data, six.string_types):
             if 'data:' in data and ';base64,' in data:
                 header, data = data.split(';base64,')
-
+             # Try to decode the file. Return validation error if it fails.
             try:
                 decoded_file = base64.b64decode(data)
             except TypeError:
                 self.fail('invalid_image')
 
-            # 12 characters set
-            file_name = str(uuid.uuid4())[:12]
+            file_name = str(uuid.uuid4())[:12]  # set 12 characters
             file_extension = self.get_file_extension(file_name, decoded_file)
             complete_file_name = "%s.%s" % (file_name, file_extension, )
             data = ContentFile(decoded_file, name=complete_file_name)
 
         return super(Base64ImageField, self).to_internal_value(data)
 
-    def get_file_extension(self, file_name, decoded_file):
+    def get_file_extension(self, file_name, decoded_file): # check file extension
         import imghdr
 
         extension = imghdr.what(file_name, decoded_file)
