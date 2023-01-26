@@ -26,10 +26,10 @@ class ProductViewSet(ModelViewSet):
     #     serializer = ProductSerializer(queryset, many=True) # a nested representation of list of items
     #     return Response(serializer.data) # return serialized data
 
-    @action(detail=False, methods=['DELETE'])
+    @action(detail=False, methods=['DELETE']) # using the action decorator with the detail flagged as False to return a list of objects
     def bulk_delete(self, request):
         ids = request.data
-
+        # bulk deletion of multiple products
         Item.objects.filter(pk__in=ids).delete()
         return Response(status=200)
 
