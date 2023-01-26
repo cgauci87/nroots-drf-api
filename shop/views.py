@@ -3,7 +3,7 @@ import json
 from django.views.generic import View
 from shop.models import CATEGORY_CHOICES, TAG_CHOICES, STATUS_CHOICES
 
-
+# CategoriesView for CATEGORY_CHOICES
 class CategoriesView(View):
     def get(self, *args, **kwargs):
         categories = []
