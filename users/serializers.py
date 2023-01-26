@@ -52,8 +52,9 @@ class AccountSerializer(serializers.ModelSerializer):
         fields = ("id", "first_name", "last_name",
                   "email", 'is_staff', 'is_active') # listing the said fields as a subset of the default fields to be used in a model serializer
 
-
+# Address Serializer for Model Address
 class AddressSerializer(serializers.ModelSerializer):
+    # specified source parameter for each
     first_name = serializers.CharField(
         source='user.first_name', read_only=True)
     last_name = serializers.CharField(source='user.last_name', read_only=True)
@@ -62,7 +63,7 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = "__all__"
-        validators = [
+        validators = [ # enforce unique_together constraints on Address instances to prevent duplicate data on checkout process if same address has already been saved
             serializers.UniqueTogetherValidator(
                 queryset=model.objects.all(),
                 fields=('user', 'street_address', 'apartment_address', 'city'),
@@ -70,12 +71,12 @@ class AddressSerializer(serializers.ModelSerializer):
             )
         ]
 
-    def create(self, validated_data):
+    def create(self, validated_data): # overriding the create() method for Model Address
         validated_data['default'] = True
         inst = super().create(validated_data)
 
         Address.objects.filter(user_id=inst.user_id).exclude(
             pk=inst.pk).update(default=False)
-        # find all address by this user, exclude the one we just created, set them to false
+        # find all address by this user, exclude the one created, set them to false
         # update addresses set default=False WHERE user_id = <user_id> and id <> inst.id
         return inst
