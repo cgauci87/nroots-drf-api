@@ -101,21 +101,21 @@ class OrderSerializer(serializers.ModelSerializer):
             qty += item_id.qty
         order.qty = qty
         order.price = total
-        order.save()
+        order.save() # save order to database
 
-        # SEND ORDER SUMMARY EMAIL HERE
+        # SEND ORDER SUMMARY EMAIL HERE (triggered automatically upon order submission)
 
-        html_message = render_to_string('order_summary.html', {'order': order})
-        plain_message = strip_tags(html_message)
+        html_message = render_to_string('order_summary.html', {'order': order}) # loads the template
+        plain_message = strip_tags(html_message) # to strip/remove HTML tags from an existing string
         subject = render_to_string(
-            'order_summary_subject.txt',
-            {'order': order})
+            'order_summary_subject.txt', 
+            {'order': order}) # loads the text file which contain the subject line
 
         try:
             mail.send_mail(subject, plain_message, EMAIL_HOST_USER, [
-                order.email], html_message=html_message)
+                order.email], html_message=html_message) # Sending email by using the send_mail function (imported).
         except Exception as e:
-            print(e)
+            print(e) # print exception if email delivery not successful
 
         return order
 
