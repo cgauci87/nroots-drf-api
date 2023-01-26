@@ -95,6 +95,7 @@ def registerView(request):
 
 # Logout function - remove token cookies
 
+
 @rest_decorators.api_view(['GET'])
 @rest_decorators.permission_classes([rest_permissions.IsAuthenticated])
 def logoutView(request):
@@ -120,7 +121,7 @@ def logoutView(request):
 
 class CookieTokenRefreshSerializer(jwt_serializers.TokenRefreshSerializer):
     refresh = None
-    # Validation - get refresh cookie and validate 
+    # Validation - get refresh cookie and validate
 
     def validate(self, attrs):
         attrs['refresh'] = self.context['request'].COOKIES.get('refresh')
@@ -135,7 +136,7 @@ class CookieTokenRefreshSerializer(jwt_serializers.TokenRefreshSerializer):
 
 class CookieTokenRefreshView(jwt_views.TokenRefreshView):
     serializer_class = CookieTokenRefreshSerializer
-    # Renew access token using the refresh token
+    # If resoponse would be "refresh" -  Get refresh cookie and set values so to "refresh" the access token.
 
     def finalize_response(self, request, response, *args, **kwargs):
         if response.data.get("refresh"):
