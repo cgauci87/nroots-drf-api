@@ -59,10 +59,10 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Item
         fields = '__all__'
 
-
+# OrderItemSerializer for OrderItem model
 class OrderItemSerializer(serializers.ModelSerializer):
-    total = serializers.DecimalField(default=0.00, max_digits=10, decimal_places=2)
-    title = serializers.CharField(source='item_id.title', read_only=True)
+    total = serializers.DecimalField(default=0.00, max_digits=10, decimal_places=2) # using DecimalField for total to avoid precision issues
+    title = serializers.CharField(source='item_id.title', read_only=True) # specified a source parameter
 
     class Meta:
         model = OrderItem
