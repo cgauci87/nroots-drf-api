@@ -97,6 +97,7 @@ INSTALLED_APPS = [
 
     'nroots_drf_api',
     'users',
+    'shop',
 ]
 
 MIDDLEWARE = [
