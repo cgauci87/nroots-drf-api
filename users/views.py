@@ -213,13 +213,13 @@ class ForgotPassword(APIView):
                 'message': 'A password link has been sent to the registered email'}
         return JsonResponse(response) # return success response if successful
 
-    def patch(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs): #patch - when user receieve the forgot password email and proceed to reset the password via the link with token that was provided.
         if not "reset_token" in request.data:
             return response.Response(status_code=404)
         user = models.Account.objects.filter(
-            reset_password_token=request.data.get("reset_token")).first()
+            reset_password_token=request.data.get("reset_token")).first() # Get the reset token from the url
         if not user:
-            response.Response(status_code=404)
+            response.Response(status_code=404) # return exception if user invalid
         if user:
             # reset the token to a random value so to expire it
             user.reset_password_token = str(uuid.uuid4().hex)
@@ -228,9 +228,9 @@ class ForgotPassword(APIView):
             # save the new password
             user.save()
             # success response
-            response = {'message': 'Your new password has been set.'}
+            response = {'message': 'Your new password has been set.'} # success message if response is successful
         else:
-            response = {'message': 'User not found'}
+            response = {'message': 'User not found'} # pending bug
         return JsonResponse(response)
 
 
