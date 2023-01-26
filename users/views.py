@@ -255,19 +255,13 @@ class ChangeCurrentPasswordView(APIView):
         user.save()
         return self.send_success_response(message="Success")
 
-
+# AddressViewSet for Model Address
 class AddressViewSet(ModelViewSet):
     # list, get, update/patch, delete
     model = Address
     serializer_class = AddressSerializer
     queryset = Address.objects.all()
     # permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-
-        queryset = queryset.filter(user=self.request.user)
-        return queryset
 
     def query_set(self, request, *args, **kwargs):
         user = User.objects.filter(email=current_user.email) # filter by current user email object
