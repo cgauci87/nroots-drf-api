@@ -2,12 +2,14 @@ from rest_framework import serializers
 from shop.models import Item, Order, OrderItem
 
 from django.core.mail import send_mail
-from nroots_drf_api.settings import (
+from mycoapp.settings import (
     DEFAULT_FROM_EMAIL, EMAIL_HOST_USER
 )
 from django.core import mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from decimal import *
+
 
 
 # Base64ImageField Serializer - decode image file - mainly used to upload product images
@@ -44,14 +46,14 @@ class Base64ImageField(serializers.ImageField):
 
         return extension
 
-
+# ProductSerializer for Item model using DecimalField for pricing/total to avoid precision issues
 class ProductSerializer(serializers.ModelSerializer):
 
-    price = serializers.DecimalField(max_digits=6, decimal_places=2)
-    comparePrice = serializers.DecimalField(max_digits=6, decimal_places=2)
-    uploadedImg = Base64ImageField()
+    price = serializers.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    comparePrice = serializers.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    uploadedImg = Base64ImageField() # an image representation for Base64ImageField, inherited from ImageField
     created_at = serializers.DateTimeField(
-        format='%d/%m/%y %H:%M', required=False)
+        format='%d/%m/%y %H:%M', required=False) # timstamp in human readable format
 
     class Meta:
         model = Item
@@ -59,7 +61,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    total = serializers.FloatField(read_only=True)
+    total = serializers.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     title = serializers.CharField(source='item_id.title', read_only=True)
 
     class Meta:
@@ -81,7 +83,7 @@ class OrderSerializer(serializers.ModelSerializer):
         items = validated_data.pop('items')
         order = super().create(validated_data)
         qty = 0
-        total = 0
+        total = Decimal(0)
 
         for item_id in items:
             item_id['item_id'] = item_id['item_id'].pk

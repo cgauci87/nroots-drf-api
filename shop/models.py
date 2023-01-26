@@ -50,8 +50,8 @@ class Order(models.Model):
     # Generate a random id, unique order number using UUID (see below def)
     order_id = models.CharField(max_length=120, blank=True)
     qty = models.IntegerField(null=True, blank=True)
-    price = models.FloatField(blank=True, default=0)
-    total = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
+    price = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+    total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     comment = models.TextField(null=True, blank=True)
     first_name = models.CharField(
         max_length=25)
@@ -98,9 +98,9 @@ class Item(models.Model):
     """ Product Model """
     title = models.CharField(max_length=100)
     description = models.TextField()
-    price = models.FloatField()
-    comparePrice = models.FloatField()
-    uploadedImg = models.ImageField()
+    price = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+    comparePrice = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+    uploadedImg = models.ImageField() # receive a Base64 encoded image and save into ImageField
     category = models.CharField(
         choices=CATEGORY_CHOICES, max_length=20, blank=True, null=True) # including CATEGORY_CHOICES
     tag = models.CharField(choices=TAG_CHOICES,
@@ -118,8 +118,8 @@ class OrderItem(models.Model):
         Order, on_delete=models.CASCADE, null=True, related_name='items') # linked to Order by means of the foreign key,  set a related_name argument on the relationship
     item_id = models.ForeignKey(
         Item, on_delete=models.SET_NULL, null=True, related_name='orders')
-    price = models.FloatField()
+    price = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     qty = models.IntegerField()
-    total = models.FloatField(default=0.00)
+    total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
 
 # set on_delete=models.CASCADE on models which has ForeignKey field, so when the referenced object is deleted, also delete the objects that have references to it
