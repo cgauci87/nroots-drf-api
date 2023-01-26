@@ -120,7 +120,7 @@ def logoutView(request):
 
 class CookieTokenRefreshSerializer(jwt_serializers.TokenRefreshSerializer):
     refresh = None
-    # Validation
+    # Validation - get refresh cookie and validate 
 
     def validate(self, attrs):
         attrs['refresh'] = self.context['request'].COOKIES.get('refresh')
