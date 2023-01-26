@@ -93,8 +93,7 @@ def registerView(request):
     # return exception if failed
     return rest_exceptions.AuthenticationFailed("Invalid credentials!")
 
-# Logout function
-
+# Logout function - remove token cookies
 
 @rest_decorators.api_view(['GET'])
 @rest_decorators.permission_classes([rest_permissions.IsAuthenticated])
