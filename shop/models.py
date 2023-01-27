@@ -96,6 +96,7 @@ class Order(models.Model):
 
 class Item(models.Model):
     """ Product Model """
+    created_at = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100)
     description = models.TextField()
     price = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)

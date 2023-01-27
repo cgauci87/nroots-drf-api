@@ -39,9 +39,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 
 ALLOWED_HOSTS = [
-    '8000-cgauci87-nrootsdrfapi-5yls6ei40in.ws-eu84.gitpod.io', 'nroots-drf-api.herokuapp.com',]
+    '8000-cgauci87-nrootsdrfapi-d98bn05x6dp.ws-eu84.gitpod.io', 'nroots-drf-api.herokuapp.com',]
 
-CORS_ALLOWED_ORIGINS = ['https://8000-cgauci87-nrootsdrfapi-5yls6ei40in.ws-eu84.gitpod.io',
+CORS_ALLOWED_ORIGINS = ['https://8000-cgauci87-nrootsdrfapi-d98bn05x6dp.ws-eu84.gitpod.io',
                         'https://nroots-drf-api.herokuapp.com',]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -76,7 +76,7 @@ CORS_ALLOW_METHODS = [
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTP_ONLY = True
 CSRF_TRUSTED_ORIGINS = [
-    '8000-cgauci87-nrootsdrfapi-5yls6ei40in.ws-eu83.gitpod.io']
+    '8000-cgauci87-nrootsdrfapi-d98bn05x6dp.ws-eu84.gitpod.io']
 CSRF_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SECURE = True
