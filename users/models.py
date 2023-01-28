@@ -4,6 +4,8 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.conf import settings
 from django.core.exceptions import NON_FIELD_ERRORS
 
+
+
 # ADDRESS_CHOICES is being used for address_type field in the Address Model
 ADDRESS_CHOICES = (
     ('B', 'Billing'),
