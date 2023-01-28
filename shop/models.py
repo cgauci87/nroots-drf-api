@@ -108,6 +108,7 @@ class Item(models.Model):
                            max_length=20, blank=True, null=True)  # including TAG_CHOICES
     status = models.CharField(max_length=20,
                               choices=STATUS_CHOICES, default='Order Created', null=True)  # including STATUS_CHOICES
+    
 
 # generate string representations of the objects
 def __str__(self):
