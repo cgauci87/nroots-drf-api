@@ -97,7 +97,7 @@ class OrderSerializer(serializers.ModelSerializer):
             item_id.order = order
             item_id.total = item_id.price * item_id.qty # calculate total
             item_id.save() 
-            total += item_id.total
+            total += Decimal(item_id.total)
             qty += item_id.qty
         order.qty = qty
         order.price = total

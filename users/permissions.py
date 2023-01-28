@@ -12,7 +12,7 @@ class IsAdminOrReadOnly(BasePermission):
 
 class IsMyOrderOrReadOnly(BasePermission):
     def has_permission(self, request, view):
-        if request.user.is_staff or request.user.is_admin:
+        if request.user.is_authenticated or request.user.is_staff:
             return True
         
         if request.method in ['POST', 'HEAD']:
@@ -22,7 +22,7 @@ class IsMyOrderOrReadOnly(BasePermission):
     
     def has_object_permission(self, request, view, obj):
         
-        if request.user.is_staff or request.user.is_admin:
+        if request.user.is_authenticated and request.user.is_staff:
             return True
         
         return False
