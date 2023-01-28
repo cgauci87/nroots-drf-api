@@ -2,7 +2,7 @@ from rest_framework import serializers
 from shop.models import Item, Order, OrderItem
 
 from django.core.mail import send_mail
-from mycoapp.settings import (
+from nroots_drf_api.settings import (
     DEFAULT_FROM_EMAIL, EMAIL_HOST_USER
 )
 from django.core import mail

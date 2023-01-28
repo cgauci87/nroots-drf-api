@@ -10,4 +10,4 @@ router.register('products', ProductViewSet)
 router.register('order', OrderViewSet)
 
 urlpatterns = [] + router.urls # append router.urls to the above list of views.
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) = # serving static files
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # serving static files

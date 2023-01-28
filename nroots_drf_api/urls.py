@@ -29,6 +29,9 @@ urlpatterns = [
     path('', root_route),
     path('admin/', admin.site.urls),
     path('auth/', include("users.urls", namespace='users')),
+
+
+    path('', include('shop.urls')),
+    path('', include('cms.urls'))
 ]
-# serving static files
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

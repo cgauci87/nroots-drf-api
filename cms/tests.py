@@ -63,6 +63,19 @@ class ProductDetailViewSetTests(APITestCase):
         """Test that a user can't retrieve a post using an invalid ID"""
         response = self.client.get('/products/999/')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+    
+    def test_user_cant_post_to_add_product(self):
+        """Test that a user can't post a product"""
+        self.client.login(username='john', password='pass')
+        response = self.client.post('/products/', {
+            'title': 'a new title'
+        })
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN) 
+        
+        
+        
+        
+        
 
     def test_anonymous_user_can_submit_order(self):
         """Test that an anonymous user can submit an order """
@@ -86,3 +99,5 @@ class ProductDetailViewSetTests(APITestCase):
         count = Order.objects.count()
         self.assertEqual(count, 1)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        
+    
