@@ -21,6 +21,7 @@ class CommonTest(APITestCase):
         user = User.objects.get(email='johndoe@example.com')
         user.is_staff = True
         user.save()
+        self.authenticated_user = user
         self.unauth_client = APIClient()
         self.regular_client = APIClient()
         self.regular_client.login(email='regular@example.com', password='pass')
@@ -69,6 +70,13 @@ class ProductListViewSetTests(CommonTest):
 
 class ProductDetailViewSetTests(CommonTest):
     """Product Detail View Set Tests"""
+    
+    def get_ids(self):
+        items = Item.objects.all()
+        num_products = items.count()
+        self.assertNotEqual(num_products, 0)
+        ids = [x.id for x in items]
+        return ids
 
     def setUp(self):
         super().setUp()
@@ -111,10 +119,13 @@ class ProductDetailViewSetTests(CommonTest):
         """Test that an authenticated user can submit an order and save shipping address """
         data = self.get_order_data()
         
+        self.assertEqual(self.authenticated_user.addresses.count(), 0)
+        
         self.assertEquals(Order.objects.filter().count(), 0)
         response = self.client.post('/order/', data, format='json')
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
         self.assertEquals(Order.objects.filter().count(), 1)
+        self.assertEqual(self.authenticated_user.addresses.count(), 1)
 
     def test_admin_user_can_submit_order(self):
 
@@ -124,10 +135,17 @@ class ProductDetailViewSetTests(CommonTest):
         self.assertEqual(count, 1)
         
     def test_delete_bulk_product_success(self):
-        items = Item.objects.all()
-        num_products = items.count()
-        self.assertNotEqual(num_products, 0)
-        ids = [x.id for x in items]
+        ids = self.get_ids()
         response = self.client.delete('/products/bulk_delete/', ids, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Item.objects.all().count(), 0)
+        
+    def test_delete_bulk_product_fail_regular_user(self):
+        ids = self.get_ids()
+        response = self.regular_client.delete('/products/bulk_delete/', ids, format='json')
+        self.assertEqual(response.status_code, 403)
+        
+    def test_delete_bulk_product_fail_anon_user(self):
+        ids = self.get_ids()
+        response = self.unauth_client.delete('/products/bulk_delete/', ids, format='json')
+        self.assertEqual(response.status_code, 401)

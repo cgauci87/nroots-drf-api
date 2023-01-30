@@ -45,8 +45,8 @@ def loginView(request):
     password = serializer.validated_data["password"]
 
     user = authenticate(email=email, password=password)
-
-    if user is not None:
+    allow_login = user and user.is_active
+    if allow_login:
         tokens = get_user_tokens(user)
         res = response.Response()
         # Set cookies upon successful response

@@ -90,7 +90,7 @@ class Account(AbstractBaseUser):
 
 class Address(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE, related_name="profile")
+                             on_delete=models.CASCADE, related_name="addresses")
     address_type = models.CharField(max_length=1, choices=ADDRESS_CHOICES)
     apartment_address = models.CharField(max_length=100)
     street_address = models.CharField(max_length=100)

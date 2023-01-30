@@ -16,9 +16,14 @@ class ProductViewSet(ModelViewSet):
     # list, get, update/patch, delete
     model = Item
     serializer_class = ProductSerializer
-    queryset = Item.objects.all().order_by("-created_at") # order by created_at (recent created products will display first in the list)
+    queryset = Item.objects.all()
     permission_classes = [IsAdminOrReadOnly]
-    # permission_classes = [permissions.DjangoModelPermissionsOrAnonReadOnly]
+
+    def list(self, request, *args, **kwargs):
+        # order by created_at (recent created products will display first in the list)
+        queryset = Item.objects.all().order_by("-created_at")
+        # return a list
+        return Response(ProductSerializer(queryset, many=True).data)
 
     # using the action decorator with the detail flagged as False to return a list of objects
     @action(detail=False, methods=['DELETE'], permission_classes=[permissions.IsAdminUser])
@@ -46,7 +51,7 @@ class OrderViewSet(ModelViewSet):
     permission_classes = [IsMyOrderOrReadOnly]
 
     def list(self, request, *args, **kwargs):
-        # order by created_at (recent created products will display first in the list)
+        # order by created_at (recent created orders will display first in the list)
         queryset = Order.objects.all().order_by("-created_at")
         # return a list
         return Response(OrderSerializer(queryset, many=True).data)
