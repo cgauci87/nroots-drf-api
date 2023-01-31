@@ -3,16 +3,14 @@ from django.db import models
 
 
 CATEGORY_CHOICES = (
-    ('Mushroom Kits', 'Mushroom Kits'),
-    ('Mushroom Powder', 'Mushroom Powder'),
+    ('tinyplants', 'Tiny Plants'),
+    ('largeplants', 'Large Plants'),
+    ('planters', 'Planters'),
+    ('plantcare', 'Plant Care'),
 )
 
 TAG_CHOICES = (
-    ('Featured', 'Featured'),
-    ('Spring', 'Spring'),
-    ('Summer', 'Summer'),
-    ('Autumn', 'Autumn'),
-    ('Winter', 'Winter'),
+    ('featured', 'Featured'),
 )
 
 STATUS_CHOICES = (
@@ -89,10 +87,12 @@ class Order(models.Model):
             self.order_id = self.generate_order_id()
         super().save(*args, **kwargs)
     # generate string representations of the objects
+
     def __str__(self):
         return self.order_id
 
 # Item Model - used mainly to showcase products and details to the end-user , in checkout process and to manage products in CMS
+
 
 class Item(models.Model):
     """ Product Model """
@@ -100,24 +100,28 @@ class Item(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     price = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
-    comparePrice = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
-    uploadedImg = models.ImageField() # receive a Base64 encoded image and save into ImageField
+    comparePrice = models.DecimalField(
+        default=0.00, max_digits=10, decimal_places=2)
+    # receive a Base64 encoded image and save into ImageField
+    uploadedImg = models.ImageField()
     category = models.CharField(
-        choices=CATEGORY_CHOICES, max_length=20, blank=True, null=True) # including CATEGORY_CHOICES
+        choices=CATEGORY_CHOICES, max_length=20, blank=True, null=True)  # including CATEGORY_CHOICES
     tag = models.CharField(choices=TAG_CHOICES,
                            max_length=20, blank=True, null=True)  # including TAG_CHOICES
     status = models.CharField(max_length=20,
                               choices=STATUS_CHOICES, default='Order Created', null=True)  # including STATUS_CHOICES
-    
+
 
 # generate string representations of the objects
 def __str__(self):
     return f'{self.id} {self.title}'
 
 # OrderItem Model - used mainly to showcase order and details of order and associated items in the order to the admin and user , in checkout process and to manage orders in CMS
+
+
 class OrderItem(models.Model):
     order = models.ForeignKey(
-        Order, on_delete=models.CASCADE, null=True, related_name='items') # linked to Order by means of the foreign key,  set a related_name argument on the relationship
+        Order, on_delete=models.CASCADE, null=True, related_name='items')  # linked to Order by means of the foreign key,  set a related_name argument on the relationship
     item_id = models.ForeignKey(
         Item, on_delete=models.SET_NULL, null=True, related_name='orders')
     price = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
