@@ -3,14 +3,16 @@ from django.db import models
 
 
 CATEGORY_CHOICES = (
-    ('tinyplants', 'Tiny Plants'),
-    ('largeplants', 'Large Plants'),
-    ('planters', 'Planters'),
-    ('plantcare', 'Plant Care'),
+    ('', ''),
+    ('Tiny Plants', 'Tiny Plants'),
+    ('Large Plants', 'Large Plants'),
+    ('Planters', 'Planters'),
+    ('Plant Care', 'Plant Care'),
 )
 
 TAG_CHOICES = (
-    ('featured', 'Featured'),
+    ('', ''),
+    ('Featured', 'Featured'),
 )
 
 STATUS_CHOICES = (
@@ -105,9 +107,9 @@ class Item(models.Model):
     # receive a Base64 encoded image and save into ImageField
     uploadedImg = models.ImageField()
     category = models.CharField(
-        choices=CATEGORY_CHOICES, max_length=20, blank=True, null=True)  # including CATEGORY_CHOICES
+        choices=CATEGORY_CHOICES, max_length=20, default="", blank=True, null=True)  # including CATEGORY_CHOICES
     tag = models.CharField(choices=TAG_CHOICES,
-                           max_length=20, blank=True, null=True)  # including TAG_CHOICES
+                           max_length=20, default="", blank=True, null=True)  # including TAG_CHOICES
     status = models.CharField(max_length=20,
                               choices=STATUS_CHOICES, default='Order Created', null=True)  # including STATUS_CHOICES
 

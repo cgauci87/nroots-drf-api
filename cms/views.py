@@ -7,6 +7,7 @@ from shop.models import (
     Item,
     Order
 )
+import django_filters
 from users.permissions import IsAdminOrReadOnly, IsMyOrderOrReadOnly
 
 # ProductViewSet for Item model
@@ -18,6 +19,8 @@ class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
     queryset = Item.objects.all()
     permission_classes = [IsAdminOrReadOnly]
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filterset_fields = ['category', 'tag']
 
     def list(self, request, *args, **kwargs):
         # order by created_at (recent created products will display first in the list)

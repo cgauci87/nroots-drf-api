@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from datetime import timedelta
 from pathlib import Path
-
 import os
 import dj_database_url
 
@@ -25,6 +24,7 @@ CLOUDINARY_STORAGE = {
 }
 MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880 # 5MB max upload size
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -39,9 +39,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 
 ALLOWED_HOSTS = [
-    '8000-cgauci87-nrootsdrfapi-j8v838srezm.ws-eu84.gitpod.io', '3000-cgauci87-nrootsreactfro-e4s71h2fjus.ws-eu84.gitpod.io', 'nroots-drf-api.herokuapp.com',]
+    '8000-cgauci87-nrootsdrfapi-j8v838srezm.ws-eu85.gitpod.io', '3000-cgauci87-nrootsreactfro-e4s71h2fjus.ws-eu85.gitpod.io', 'nroots-drf-api.herokuapp.com',]
 
-CORS_ALLOWED_ORIGINS = ['https://8000-cgauci87-nrootsdrfapi-j8v838srezm.ws-eu84.gitpod.io', 'https://3000-cgauci87-nrootsreactfro-e4s71h2fjus.ws-eu84.gitpod.io',
+CORS_ALLOWED_ORIGINS = ['https://8000-cgauci87-nrootsdrfapi-j8v838srezm.ws-eu85.gitpod.io', 'https://3000-cgauci87-nrootsreactfro-e4s71h2fjus.ws-eu85.gitpod.io',
                         'https://nroots-drf-api.herokuapp.com',]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -76,7 +76,7 @@ CORS_ALLOW_METHODS = [
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTP_ONLY = True
 CSRF_TRUSTED_ORIGINS = [
-    '8000-cgauci87-nrootsdrfapi-j8v838srezm.ws-eu84.gitpod.io', '3000-cgauci87-nrootsreactfro-e4s71h2fjus.ws-eu84.gitpod.io']
+    '8000-cgauci87-nrootsdrfapi-j8v838srezm.ws-eu85.gitpod.io', '3000-cgauci87-nrootsreactfro-e4s71h2fjus.ws-eu85.gitpod.io']
 CSRF_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SECURE = True
@@ -94,10 +94,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'cloudinary_storage',
     'django.contrib.staticfiles',
-    # 'django.contrib.sites',
     'cloudinary',
 
     'rest_framework',
+    'django_filters',
     "corsheaders",
     'rest_framework_simplejwt.token_blacklist',
 
