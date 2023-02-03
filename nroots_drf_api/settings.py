@@ -10,11 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-
-from datetime import timedelta
-from pathlib import Path
-import os
 import dj_database_url
+import os
+from pathlib import Path
+from datetime import timedelta
+import sys
+
+
 
 if os.path.exists('env.py'):
     import env
@@ -24,7 +26,7 @@ CLOUDINARY_STORAGE = {
 }
 MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880 # 5MB max upload size
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB max upload size
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -255,8 +257,7 @@ SIMPLE_JWT = {
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
+        'rest_framework_simplejwt.authentication.JWTAuthentication',],
 
     "DEFAULT_PERMISSION_CLASSES": [
         'rest_framework.permissions.AllowAny',
@@ -279,3 +280,10 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+TESTING = sys.argv[1:2] == ['test']
+
+if TESTING:
+    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'].append(
+        'rest_framework.authentication.SessionAuthentication')

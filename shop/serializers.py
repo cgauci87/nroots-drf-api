@@ -9,6 +9,7 @@ from django.core import mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from decimal import *
+from users.models import Address
 
 
 
@@ -85,6 +86,17 @@ class OrderSerializer(serializers.ModelSerializer):
         order = super().create(validated_data)
         qty = 0
         total = Decimal(0) # create a Decimal from decimal import *
+        
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            user = request.user
+            Address.objects.get_or_create(
+                apartment_address=order.apartment_address,
+                street_address=order.street_address,
+                city=order.city,
+                phone_number=order.phone_number,
+                user=user
+            )
 
         for item_id in items: # a nested field on the serializer class (writable nested serialization)
             item_id['item_id'] = item_id['item_id'].pk
