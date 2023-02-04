@@ -7,7 +7,8 @@ from shop.models import (
     Item,
     Order
 )
-import django_filters
+import django_filters.rest_framework
+from rest_framework import filters
 from users.permissions import IsAdminOrReadOnly, IsMyOrderOrReadOnly
 
 # ProductViewSet for Item model
@@ -17,15 +18,15 @@ class ProductViewSet(ModelViewSet):
     # list, get, update/patch, delete
     model = Item
     serializer_class = ProductSerializer
-    queryset = Item.objects.all()
+    queryset = Item.objects.all().order_by("-created_at") # order by created_at (recent created products will display first in the list)
     permission_classes = [IsAdminOrReadOnly]
-    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['category', 'tag']
+    search_fields = ['title', 'category']
 
     def list(self, request, *args, **kwargs):
-        # order by created_at (recent created products will display first in the list)
         queryset = self.get_queryset()
-        queryset = self.filter_queryset(queryset)
+        queryset = self.filter_queryset(queryset) # custom generic filtering,  overriding the .filter_queryset
         
         # return a list
         return Response(ProductSerializer(queryset, many=True).data)
