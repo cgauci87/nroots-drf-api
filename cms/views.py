@@ -24,7 +24,9 @@ class ProductViewSet(ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         # order by created_at (recent created products will display first in the list)
-        queryset = Item.objects.all().order_by("-created_at")
+        queryset = self.get_queryset()
+        queryset = self.filter_queryset(queryset)
+        
         # return a list
         return Response(ProductSerializer(queryset, many=True).data)
 
