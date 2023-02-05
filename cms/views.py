@@ -18,18 +18,15 @@ class ProductViewSet(ModelViewSet):
     # list, get, update/patch, delete
     model = Item
     serializer_class = ProductSerializer
-    queryset = Item.objects.all().order_by("-created_at") # order by created_at (recent created products will display first in the list)
+    # order by created_at (recent created products will display first in the list)
+    queryset = Item.objects.all().order_by("-created_at")
     permission_classes = [IsAdminOrReadOnly]
-    filter_backends = [django_filters.rest_framework.DjangoFilterBackend, filters.SearchFilter]
+    filter_backends = [
+        django_filters.rest_framework.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['category', 'tag']
     search_fields = ['title', 'category']
+    ordering_fields = ['price', 'name', 'created_at']
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        queryset = self.filter_queryset(queryset) # custom generic filtering,  overriding the .filter_queryset
-        
-        # return a list
-        return Response(ProductSerializer(queryset, many=True).data)
 
     # using the action decorator with the detail flagged as False to return a list of objects
     @action(detail=False, methods=['DELETE'], permission_classes=[permissions.IsAdminUser])
@@ -38,13 +35,13 @@ class ProductViewSet(ModelViewSet):
         # bulk deletion of multiple products
         Item.objects.filter(pk__in=ids).delete()
         return Response(status=200)
-    
+
     # def get_queryset(self):
     #     queryset = self.queryset
-        
+
     #     if self.request.is_staff:
     #         return queryset
-        
+
     #     return queryset.filter() # Regular users will se only is_published=True
 
 
