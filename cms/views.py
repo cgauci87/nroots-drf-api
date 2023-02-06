@@ -36,14 +36,6 @@ class ProductViewSet(ModelViewSet):
         Item.objects.filter(pk__in=ids).delete()
         return Response(status=200)
 
-    # def get_queryset(self):
-    #     queryset = self.queryset
-
-    #     if self.request.is_staff:
-    #         return queryset
-
-    #     return queryset.filter() # Regular users will se only is_published=True
-
 
 # OrderViewSet for Model Order
 class OrderViewSet(ModelViewSet):
