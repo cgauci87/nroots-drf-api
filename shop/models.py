@@ -4,15 +4,16 @@ from django.db import models
 
 CATEGORY_CHOICES = (
     ('', ''),
-    ('Tiny Plants', 'Tiny Plants'),
-    ('Large Plants', 'Large Plants'),
+    ('Tiny-Plants', 'Tiny Plants'),
+    ('Large-Plants', 'Large Plants'),
     ('Planters', 'Planters'),
-    ('Plant Care', 'Plant Care'),
+    ('Plant-Care', 'Plant Care'),
 )
 
 TAG_CHOICES = (
     ('', ''),
     ('Featured', 'Featured'),
+    ('Special-Offer', 'Special Offer'),
 )
 
 STATUS_CHOICES = (
