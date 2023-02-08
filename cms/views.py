@@ -25,7 +25,7 @@ class ProductViewSet(ModelViewSet):
         django_filters.rest_framework.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['category', 'tag']
     search_fields = ['title', 'category']
-    ordering_fields = ['price', 'name', 'created_at']
+    ordering_fields = ['price', 'name', 'created_at', 'category', 'tag']
 
 
     # using the action decorator with the detail flagged as False to return a list of objects
