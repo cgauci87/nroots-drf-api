@@ -79,7 +79,7 @@ class Order(models.Model):
     def generate_order_id(self):
         # generate a random, unique order number using UUID
 
-        return uuid.uuid4().hex.upper()
+        return str(uuid.uuid4())[:8].hex.upper()
 
     def save(self, *args, **kwargs):
 
@@ -102,9 +102,11 @@ class Item(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100)
     description = models.TextField()
+    additional_details = models.CharField(
+        max_length=1000, blank=True, null=True)
     price = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     comparePrice = models.DecimalField(
-        default=0.00, max_digits=10, decimal_places=2)
+        blank=True, null=True, max_digits=10, decimal_places=2)
     # receive a Base64 encoded image and save into ImageField
     uploadedImg = models.ImageField()
     category = models.CharField(

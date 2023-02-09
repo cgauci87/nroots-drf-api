@@ -24,11 +24,11 @@ class ProductViewSet(ModelViewSet):
     filter_backends = [
         django_filters.rest_framework.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['category', 'tag']
-    search_fields = ['title', 'category']
+    search_fields = ['title', 'category', 'tag']
     ordering_fields = ['price', 'name', 'created_at', 'category', 'tag']
 
-
     # using the action decorator with the detail flagged as False to return a list of objects
+
     @action(detail=False, methods=['DELETE'], permission_classes=[permissions.IsAdminUser])
     def bulk_delete(self, request):
         ids = request.data
@@ -41,12 +41,9 @@ class ProductViewSet(ModelViewSet):
 class OrderViewSet(ModelViewSet):
     # list, get, update/patch, delete
     model = Order
-    queryset = Order.objects.all()
+    queryset = Order.objects.all().order_by("-created_at")
     serializer_class = OrderSerializer
     permission_classes = [IsMyOrderOrReadOnly]
-
-    def list(self, request, *args, **kwargs):
-        # order by created_at (recent created orders will display first in the list)
-        queryset = Order.objects.all().order_by("-created_at")
-        # return a list
-        return Response(OrderSerializer(queryset, many=True).data)
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['order_id']
+    ordering_fields = ['created_at', 'order_id', 'checkout_type', 'total']
