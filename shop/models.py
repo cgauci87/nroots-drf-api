@@ -78,8 +78,7 @@ class Order(models.Model):
 
     def generate_order_id(self):
         # generate a random, unique order number using UUID
-
-        return str(uuid.uuid4())[:8].hex.upper()
+        return uuid.uuid4().hex.upper()
 
     def save(self, *args, **kwargs):
 
