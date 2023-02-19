@@ -55,9 +55,9 @@ class Order(models.Model):
     total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     comment = models.TextField(null=True, blank=True)
     first_name = models.CharField(
-        max_length=25)
+        max_length=100)
     last_name = models.CharField(
-        max_length=25)
+        max_length=100)
     email = models.EmailField(
         max_length=50)
     address_type = models.CharField(
