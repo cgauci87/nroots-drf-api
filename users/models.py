@@ -60,8 +60,8 @@ class AccountManager(BaseUserManager):
 class Account(AbstractBaseUser):
     # email field is set as unique as it is being used as a USERNAME_FIELD which uniqueness is required for the latter.
     email = models.EmailField(null=False, blank=False, unique=True)
-    first_name = models.CharField(max_length=30, blank=False, null=False)
-    last_name = models.CharField(max_length=30, blank=False, null=False)
+    first_name = models.CharField(max_length=100, blank=False, null=False)
+    last_name = models.CharField(max_length=100, blank=False, null=False)
     is_superuser = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
