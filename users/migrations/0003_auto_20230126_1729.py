@@ -14,13 +14,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='account',
             name='first_name',
-            field=models.CharField(default=django.utils.timezone.now, max_length=30),
+            field=models.CharField(default=django.utils.timezone.now, max_length=100),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='account',
             name='last_name',
-            field=models.CharField(default=django.utils.timezone.now, max_length=30),
+            field=models.CharField(default=django.utils.timezone.now, max_length=100),
             preserve_default=False,
         ),
     ]
