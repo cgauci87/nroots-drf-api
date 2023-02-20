@@ -2,6 +2,10 @@ from rest_framework import serializers
 from django.conf import settings
 from users.models import Account, Address
 
+from django.core.mail import send_mail
+from nroots_drf_api.settings import (
+    DEFAULT_FROM_EMAIL, EMAIL_HOST_USER
+)
 from django.core import mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags

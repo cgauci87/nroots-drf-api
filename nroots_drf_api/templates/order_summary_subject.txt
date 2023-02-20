@@ -1,1 +1,1 @@
-☘️☘️ Your nRoots Order [{{ order.order_id }}]☘️☘️
+☘️☘️ Your nRoots Order [{{ order.order_id }}] ☘️☘️

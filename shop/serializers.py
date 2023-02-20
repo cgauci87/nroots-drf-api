@@ -8,6 +8,7 @@ from nroots_drf_api.settings import (
 from django.core import mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+
 from decimal import *
 from users.models import Address
 

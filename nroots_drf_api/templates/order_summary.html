@@ -61,9 +61,9 @@
                 </tr>
                 {% endfor %}
               </table>
-              <h3>Total:<span> {{ order.total }} </span></h3>
+              <h3>Total: € <span> {{ order.total }} </span></h3>
               <h3>Shipping Fee:<span> FREE! </span></h3>
-              <h3>Grand Total:<span> {{ order.total }} </span></h3>
+              <h3>Grand Total: € <span> {{ order.total }} </span></h3>
 
               <!-- SHIPPING DETAILS -->
 
@@ -100,12 +100,16 @@
                 </tr>
               </table>
 
-              <table>
+              <table style="text-align: center;">
+                {% if order.comment %}
                 <tr>
                   <th>Order Notes</th>
                 </tr>
                 <tr>
                   <td>{{ order.comment }}</td>
                 </tr>
+                {% else %}
+                <tr></tr>
+                {% endif %}
               </table>
 {% endblock %}

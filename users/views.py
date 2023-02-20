@@ -203,7 +203,7 @@ class ForgotPassword(APIView):
             plain_message = strip_tags(html_message) # strip/remove HTML tags from an existing string
 
             try:
-                mail.send_mail("NRoots - Reset Your Account Password", plain_message, EMAIL_HOST_USER, [
+                mail.send_mail("nRoots - Reset Your Account Password", plain_message, EMAIL_HOST_USER, [
                                user.email], html_message=html_message) # loads the text file which contain the subject line
             except Exception as e:
                 print(e) # print exception if email delivery not successful
