@@ -1,1 +1,1 @@
-☘️☘️ Your nRoots Account has been created,[{{ user.first_name }}]! ☘️☘️
+☘️☘️ Your nRoots Account has been created, {{ user.first_name }}! ☘️☘️

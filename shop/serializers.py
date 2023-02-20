@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from shop.models import Item, Order, OrderItem
+from shop.models import Item, Order, OrderItem, ContactUs
 
 from django.core.mail import send_mail
 from nroots_drf_api.settings import (
@@ -11,7 +11,6 @@ from django.utils.html import strip_tags
 
 from decimal import *
 from users.models import Address
-
 
 
 # Base64ImageField Serializer - decode image file - mainly used to upload product images
@@ -40,7 +39,7 @@ class Base64ImageField(serializers.ImageField):
 
         return super(Base64ImageField, self).to_internal_value(data)
 
-    def get_file_extension(self, file_name, decoded_file): # check file extension
+    def get_file_extension(self, file_name, decoded_file):  # check file extension
         import imghdr
 
         extension = imghdr.what(file_name, decoded_file)
@@ -49,22 +48,32 @@ class Base64ImageField(serializers.ImageField):
         return extension
 
 # ProductSerializer for Item model using DecimalField for pricing/total to avoid precision issues
+
+
 class ProductSerializer(serializers.ModelSerializer):
 
-    price = serializers.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    comparePrice = serializers.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    uploadedImg = Base64ImageField() # an image representation for Base64ImageField, inherited from ImageField
+    price = serializers.DecimalField(
+        max_digits=10, decimal_places=2, default=0.00)
+    comparePrice = serializers.DecimalField(
+        max_digits=10, decimal_places=2, default=0.00)
+    # an image representation for Base64ImageField, inherited from ImageField
+    uploadedImg = Base64ImageField()
     created_at = serializers.DateTimeField(
-        format='%d/%m/%y %H:%M', required=False) # timstamp in human readable format
+        format='%d/%m/%y %H:%M', required=False)  # timstamp in human readable format
 
     class Meta:
         model = Item
         fields = '__all__'
 
 # OrderItemSerializer for OrderItem model
+
+
 class OrderItemSerializer(serializers.ModelSerializer):
-    total = serializers.DecimalField(default=0.00, max_digits=10, decimal_places=2) # using DecimalField for total to avoid precision issues
-    title = serializers.CharField(source='item_id.title', read_only=True) # specified a source parameter
+    # using DecimalField for total to avoid precision issues
+    total = serializers.DecimalField(
+        default=0.00, max_digits=10, decimal_places=2)
+    # specified a source parameter
+    title = serializers.CharField(source='item_id.title', read_only=True)
 
     class Meta:
         model = OrderItem
@@ -74,20 +83,23 @@ class OrderItemSerializer(serializers.ModelSerializer):
 # OrderSerializer for Order model
 class OrderSerializer(serializers.ModelSerializer):
 
-    items = OrderItemSerializer(many=True, required=False) # a nested representation of list of items
+    # a nested representation of list of items
+    items = OrderItemSerializer(many=True, required=False)
     checkout_type = serializers.CharField(required=False)
 
     created_at = serializers.DateTimeField(
-        format='%d/%m/%y %H:%M', required=False) # timstamp in human readable format
+        format='%d/%m/%y %H:%M', required=False)  # timstamp in human readable format
 
-    full_name = serializers.CharField(read_only=True) # visible field, but not editable by the user
+    # visible field, but not editable by the user
+    full_name = serializers.CharField(read_only=True)
 
-    def create(self, validated_data): 
-        items = validated_data.pop('items') # .pop searches for 'items' and returns and removes it if it is found, otherwise an exception is thrown.
+    def create(self, validated_data):
+        # .pop searches for 'items' and returns and removes it if it is found, otherwise an exception is thrown.
+        items = validated_data.pop('items')
         order = super().create(validated_data)
         qty = 0
-        total = Decimal(0) # create a Decimal from decimal import *
-        
+        total = Decimal(0)  # create a Decimal from decimal import *
+
         request = self.context.get('request')
         if request and request.user.is_authenticated:
             user = request.user
@@ -99,39 +111,51 @@ class OrderSerializer(serializers.ModelSerializer):
                 user=user
             )
 
-        for item_id in items: # a nested field on the serializer class (writable nested serialization)
+        # a nested field on the serializer class (writable nested serialization)
+        for item_id in items:
             item_id['item_id'] = item_id['item_id'].pk
 
             item_id = OrderItemSerializer(data=item_id)
             if not item_id.is_valid():
                 print(item_id.errors)
-                raise serializers.ValidationError("Invalid item") # raise validation error if item_id is not valid
+                # raise validation error if item_id is not valid
+                raise serializers.ValidationError("Invalid item")
             item_id = item_id.save()
             item_id.order = order
-            item_id.total = item_id.price * item_id.qty # calculate total
-            item_id.save() 
+            item_id.total = item_id.price * item_id.qty  # calculate total
+            item_id.save()
             total += Decimal(item_id.total)
             qty += item_id.qty
         order.qty = qty
         order.price = total
-        order.save() # save order to database
+        order.save()  # save order to database
 
         # SEND ORDER SUMMARY EMAIL HERE (triggered automatically upon order submission)
 
-        html_message = render_to_string('order_summary.html', {'order': order}) # loads the template
-        plain_message = strip_tags(html_message) # strip/remove HTML tags from an existing string
+        html_message = render_to_string(
+            'order_summary.html', {'order': order})  # loads the template
+        # strip/remove HTML tags from an existing string
+        plain_message = strip_tags(html_message)
         subject = render_to_string(
-            'order_summary_subject.txt', 
-            {'order': order}) # loads the text file which contain the subject line
+            'order_summary_subject.txt',
+            {'order': order})  # loads the text file which contain the subject line
 
         try:
             mail.send_mail(subject, plain_message, EMAIL_HOST_USER, [
-                order.email], html_message=html_message) # Sending email by using the send_mail function (imported).
+                order.email], html_message=html_message)  # Sending email by using the send_mail function (imported).
         except Exception as e:
-            print(e) # print exception if email delivery not successful
+            print(e)  # print exception if email delivery not successful
 
         return order
 
     class Meta:
         model = Order
         fields = '__all__'
+
+
+# ContactSerializer for Contact us form
+class ContactSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ContactUs
+        fields = ['full_name', 'email', 'subject', 'message']

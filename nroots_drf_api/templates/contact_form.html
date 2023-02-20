@@ -1,0 +1,44 @@
+{% extends "email_base.html" %} {% load static %} {% block content %}
+<h1
+  style="
+    color: #1e1e2d;
+    font-weight: 500;
+    margin: 0;
+    font-size: 32px;
+    font-family: 'Rubik', sans-serif;
+  "
+>
+  Thank you for contacting us!
+</h1>
+<span
+  style="
+    display: inline-block;
+    vertical-align: middle;
+    margin: 29px 0 26px;
+    border-bottom: 1px solid #cecece;
+    width: 100px;
+  "
+></span>
+<p style="color: #455056; font-size: 15px; line-height: 24px; margin: 0">
+  Hi {{contact.full_name}},
+</p>
+<p>We have received your message.</p>
+<p>We promise to get back to you</p>
+<p>Here is a copy of the message sent</p>
+
+<table style="text-align: center">
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Subject</th>
+    <th>Message</th>
+  </tr>
+  <tr>
+    <td>{{ contact.full_name }}</td>
+    <td>{{ contact.email }}</td>
+    <td>{{ contact.subject }}</td>
+    <td>{{ contact.message }}</td>
+  </tr>
+</table>
+
+{% endblock %}

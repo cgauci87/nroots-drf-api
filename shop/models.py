@@ -133,3 +133,10 @@ class OrderItem(models.Model):
     total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
 
 # set on_delete=models.CASCADE on models which has ForeignKey field, so when the referenced object is deleted, also delete the objects that have references to it
+
+
+class ContactUs(models.Model):
+    full_name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=100)
+    subject = models.CharField(max_length=100)
+    message = models.TextField(max_length=1000)
