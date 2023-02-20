@@ -187,7 +187,7 @@ def userProfileView(request):
 # ForgotPassword - API View
 class ForgotPassword(APIView):
     def post(self, request, *args, **kwargs): #post - when user input his email address and hit submit to initiate the forgot password reset process
-        FRONTEND_URL = "https://nroots-react.herokuapp.com"
+        FRONTEND_URL = "https://nroots-react-frontend.herokuapp.com"
         user = models.Account.objects.filter(
             email=request.data.get("email")).first() # get email from the input of the user
         if user:
@@ -230,7 +230,7 @@ class ForgotPassword(APIView):
             # success response
             response = {'message': 'Your new password has been set.'} # success message if response is successful
         else:
-            response = {'message': 'User not found'} # pending bug
+            response = {'message': 'User not found'}
         return JsonResponse(response)
 
 
