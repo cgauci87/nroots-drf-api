@@ -162,3 +162,4 @@ class ContactSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         data = super().create(validated_data)
+        return data
