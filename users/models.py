@@ -1,6 +1,6 @@
 from enum import unique
 from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.conf import settings
 from django.core.exceptions import NON_FIELD_ERRORS
 
@@ -57,7 +57,7 @@ class AccountManager(BaseUserManager):
 # Account Model
 
 
-class Account(AbstractBaseUser):
+class Account(AbstractBaseUser, PermissionsMixin):
     # email field is set as unique as it is being used as a USERNAME_FIELD which uniqueness is required for the latter.
     email = models.EmailField(null=False, blank=False, unique=True)
     first_name = models.CharField(max_length=100, blank=False, null=False)
