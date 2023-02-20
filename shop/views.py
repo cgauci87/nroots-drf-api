@@ -70,7 +70,7 @@ class ContactView(APIView):
 
         try:
             mail.send_mail("nRoots - Thank you for contacting us", plain_message, EMAIL_HOST_USER,
-                            recipient_list, html_message=html_message)  # loads the text file which contain the subject line
+                           recipient_list, html_message=html_message)  # loads the text file which contain the subject line
         except Exception as e:
             print(e)  # print exception if email delivery not successful
         return Response(status=200)
