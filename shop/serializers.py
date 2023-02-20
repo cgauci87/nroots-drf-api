@@ -159,3 +159,6 @@ class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactUs
         fields = ['full_name', 'email', 'subject', 'message']
+
+    def create(self, validated_data):
+        data = super().create(validated_data)
