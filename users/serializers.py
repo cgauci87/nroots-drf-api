@@ -2,6 +2,10 @@ from rest_framework import serializers
 from django.conf import settings
 from users.models import Account, Address
 
+from django.core import mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
 # Registration Serializer for Model Account
 
 
