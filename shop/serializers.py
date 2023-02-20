@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from shop.models import Item, Order, OrderItem, ContactUs
+from shop.models import Item, Order, OrderItem
 
 from django.core.mail import send_mail
 from nroots_drf_api.settings import (
@@ -154,12 +154,9 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 # ContactSerializer for Contact us form
-class ContactSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = ContactUs
-        fields = ['full_name', 'email', 'subject', 'message']
-
-    def create(self, validated_data):
-        data = super().create(validated_data)
-        return data
+class ContactSerializer(serializers.Serializer):
+    full_name = serializers.CharField(required=True)
+    email = serializers.EmailField(required=True)
+    subject = serializers.CharField(required=True)
+    message = serializers.CharField(required=True)

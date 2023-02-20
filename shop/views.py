@@ -62,15 +62,15 @@ class ContactView(APIView):
         if not serializer.is_valid():
             return Response(serializers.errors, status=400)
 
-            html_message = render_to_string(
-                'contact_form.html', {'data': serializer.validated_data})  # loads the template
-            # strip/remove HTML tags from an existing string
-            plain_message = strip_tags(html_message)
-            recipient_list = [data.email, EMAIL_HOST_USER]
+        html_message = render_to_string(
+            'contact_form.html', {'data': serializer.validated_data})  # loads the template
+        # strip/remove HTML tags from an existing string
+        plain_message = strip_tags(html_message)
+        recipient_list = [data.email, EMAIL_HOST_USER]
 
-            try:
-                mail.send_mail("nRoots - Thank you for contacting us", plain_message, EMAIL_HOST_USER,
-                               recipient_list, html_message=html_message)  # loads the text file which contain the subject line
-            except Exception as e:
-                print(e)  # print exception if email delivery not successful
+        try:
+            mail.send_mail("nRoots - Thank you for contacting us", plain_message, EMAIL_HOST_USER,
+                            recipient_list, html_message=html_message)  # loads the text file which contain the subject line
+        except Exception as e:
+            print(e)  # print exception if email delivery not successful
         return Response(status=200)
