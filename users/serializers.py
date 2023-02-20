@@ -4,6 +4,7 @@ from users.models import Account, Address
 
 # Registration Serializer for Model Account
 
+
 class RegistrationSerializer(serializers.ModelSerializer):
 
     # set the input type on password2 field as password for hidden style
@@ -36,6 +37,22 @@ class RegistrationSerializer(serializers.ModelSerializer):
         # pass to set_password method, creates a hashed password
         user.set_password(password)
         user.save()  # save the value in database
+
+        # SEND ACCOUNT CREATED EMAIL HERE (triggered automatically upon account creation)
+
+        html_message = render_to_string(
+            'account_created.html', {'user': user})  # loads the template
+        # strip/remove HTML tags from an existing string
+        plain_message = strip_tags(html_message)
+        subject = render_to_string(
+            'account_created_subject.txt',
+            {'user': user})  # loads the text file which contain the subject line
+
+        try:
+            mail.send_mail(subject, plain_message, EMAIL_HOST_USER, [
+                user.email], html_message=html_message)  # Sending email by using the send_mail function (imported).
+        except Exception as e:
+            print(e)  # print exception if email delivery not successful
 
         return user
 
@@ -85,7 +102,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
         Address.objects.filter(user_id=inst.user_id).exclude(
             pk=inst.pk).update(default=False)
-        
+
         # find all address by this user, exclude the one created, set them to false
         # update addresses set default=False WHERE user_id = <user_id> and id <> inst.id
         return inst
