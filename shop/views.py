@@ -60,7 +60,7 @@ class ContactView(APIView):
     def post(self, request):
         serializer = ContactSerializer(data=request.data)
         if not serializer.is_valid():
-            return Response(serializers.errors, status=400)
+            return Response(status=400)
 
         html_message = render_to_string(
             'contact_form.html', {'data': serializer.validated_data})  # loads the template
