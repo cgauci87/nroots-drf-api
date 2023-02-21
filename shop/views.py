@@ -63,10 +63,10 @@ class ContactView(APIView):
             return Response(serializers.errors, status=400)
 
         html_message = render_to_string(
-            'contact_form.html', {'data': serializer.validated_data})  # loads the template
+            'contact_form.html', {'data': serializer.validated_data})  # data defined for the template and loads the template
         # strip/remove HTML tags from an existing string
         plain_message = strip_tags(html_message)
-        recipient_list = [serializer.validated_data['email'], EMAIL_HOST_USER]
+        recipient_list = [serializer.validated_data['email'], EMAIL_HOST_USER] # define email from serializer validated_data
 
         try:
             mail.send_mail("nRoots - Thank you for contacting us", plain_message, EMAIL_HOST_USER,
