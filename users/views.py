@@ -6,6 +6,7 @@ from django.middleware import csrf
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework import exceptions as rest_exceptions, response, decorators as rest_decorators, permissions as rest_permissions
+from rest_framework import permissions
 from rest_framework_simplejwt import tokens, views as jwt_views, serializers as jwt_serializers, exceptions as jwt_exceptions
 from django.http import JsonResponse
 from rest_framework.response import Response
@@ -185,41 +186,48 @@ def userProfileView(request):
     return response.Response(serializer.data)
 
 # ForgotPassword - API View
+
+
 class ForgotPassword(APIView):
-    def post(self, request, *args, **kwargs): #post - when user input his email address and hit submit to initiate the forgot password reset process
+    # post - when user input his email address and hit submit to initiate the forgot password reset process
+    def post(self, request, *args, **kwargs):
         FRONTEND_URL = "https://nroots-react-frontend.herokuapp.com"
         user = models.Account.objects.filter(
-            email=request.data.get("email")).first() # get email from the input of the user
+            email=request.data.get("email")).first()  # get email from the input of the user
         if user:
-            token = str(uuid.uuid4().hex) # generate token with uuid
+            token = str(uuid.uuid4().hex)  # generate token with uuid
             token = token.replace("=", "").replace("&", "")
 
-            user.reset_password_token = token # set the token
+            user.reset_password_token = token  # set the token
             user.save()
-            url = FRONTEND_URL + "/auth/reset-password?reset_token=" + token # parse the url with the reset_token
+            url = FRONTEND_URL + "/auth/reset-password?reset_token=" + \
+                token  # parse the url with the reset_token
 
             html_message = render_to_string(
-                'reset_password.html', {'url': url}) # loads the template
-            plain_message = strip_tags(html_message) # strip/remove HTML tags from an existing string
+                'reset_password.html', {'url': url})  # loads the template
+            # strip/remove HTML tags from an existing string
+            plain_message = strip_tags(html_message)
 
             try:
                 mail.send_mail("nRoots - Reset Your Account Password", plain_message, EMAIL_HOST_USER, [
-                               user.email], html_message=html_message) # loads the text file which contain the subject line
+                               user.email], html_message=html_message)  # loads the text file which contain the subject line
             except Exception as e:
-                print(e) # print exception if email delivery not successful
+                print(e)  # print exception if email delivery not successful
 
             print(url)
             response = {
                 'message': 'A password link has been sent to the registered email'}
-        return JsonResponse(response) # return success response if successful
+        return JsonResponse(response)  # return success response if successful
 
-    def patch(self, request, *args, **kwargs): #patch - when user receieve the forgot password email and proceed to reset the password via the link with token that was provided.
+    # patch - when user receieve the forgot password email and proceed to reset the password via the link with token that was provided.
+    def patch(self, request, *args, **kwargs):
         if not "reset_token" in request.data:
             return response.Response(status_code=404)
         user = models.Account.objects.filter(
-            reset_password_token=request.data.get("reset_token")).first() # Get the reset token from the url
+            reset_password_token=request.data.get("reset_token")).first()  # Get the reset token from the url
         if not user:
-            response.Response(status_code=404) # return exception if user invalid
+            # return exception if user invalid
+            response.Response(status_code=404)
         if user:
             # reset the token to a random value so to expire it
             user.reset_password_token = str(uuid.uuid4().hex)
@@ -228,7 +236,8 @@ class ForgotPassword(APIView):
             # save the new password
             user.save()
             # success response
-            response = {'message': 'Your new password has been set.'} # success message if response is successful
+            # success message if response is successful
+            response = {'message': 'Your new password has been set.'}
         else:
             response = {'message': 'User not found'}
         return JsonResponse(response)
@@ -256,15 +265,16 @@ class ChangeCurrentPasswordView(APIView):
         return self.send_success_response(message="Success")
 
 # AddressViewSet for Model Address
+
+
 class AddressViewSet(ModelViewSet):
     # list, get, update/patch, delete
     model = Address
     serializer_class = AddressSerializer
     queryset = Address.objects.all()
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
-    def query_set(self, request, *args, **kwargs):
-        user = User.objects.filter(email=current_user.email) # filter by current user email object
-        queryset = Address.objects.filter(user=self.request.user) # query only the address objects of the current user
-        serializer = AddressSerializer(queryset, many=True) # a nested representation of list of items
-        return Response(serializer.data) # return response from serialized data
+    def get_queryset(self, *args, **kwargs):
+        # query only the address objects of the current user
+        queryset = Address.objects.filter(user=self.request.user)
+        return queryset  # return queryset
