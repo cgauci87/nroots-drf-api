@@ -17,7 +17,8 @@ TAG_CHOICES = (
 )
 
 STATUS_CHOICES = (
-    # 'Order Created' status would be set automatically once order has been submitted through the checkout
+    # 'Order Created' status would be set automatically once
+    # order has been submitted through the checkout
     ('Order Created', 'Order Created'),
     # Status would be updated manually to 'Order Processing' by Admin in CMS
     ('Order Processing', 'Order Processing'),
@@ -34,7 +35,7 @@ CHECKOUT_CHOICES = (
 )
 
 ADDRESS_CHOICES = (
-    # included Billing choice for future implementation, payment gateway integration
+    # included Billing choice for future implementation
     ('B', 'Billing'),
     ('S', 'Shipping'),
 )
@@ -44,10 +45,12 @@ ADDRESS_CHOICES = (
 
 class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
-    checkout_type = models.CharField(max_length=20,
-                                     choices=CHECKOUT_CHOICES, default='Guest', null=True)  # including CHECKOUT_CHOICES
+    checkout_type = models.CharField(max_length=20, choices=CHECKOUT_CHOICES,
+                                     default='Guest', null=True)
+    # including CHECKOUT_CHOICES
     order_status = models.CharField(max_length=20,
-                                    choices=STATUS_CHOICES, default='Order Created', null=True)  # including STATUS_CHOICES
+                                    choices=STATUS_CHOICES,
+                                    default='Order Created', null=True)
     # Generate a random id, unique order number using UUID (see below def)
     order_id = models.CharField(max_length=120, blank=True)
     qty = models.IntegerField(null=True, blank=True)
@@ -61,7 +64,8 @@ class Order(models.Model):
     email = models.EmailField(
         max_length=50)
     address_type = models.CharField(
-        max_length=1, default='S', choices=ADDRESS_CHOICES)  # including ADDRESS_CHOICES
+        max_length=1, default='S', choices=ADDRESS_CHOICES)
+    # including ADDRESS_CHOICES
     apartment_address = models.CharField(max_length=100)
     street_address = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
@@ -71,7 +75,7 @@ class Order(models.Model):
         # generate string representations of the objects
         return f'{self.id} {self.item}'
 
-    # this decorator declare that it can be accessed like it's a regular property
+    # decorator declare that it can be accessed like it's a regular property
     @property
     def full_name(self):  # returns a string with the user first and last name
         return f'{self.first_name} {self.last_name}'
@@ -93,7 +97,8 @@ class Order(models.Model):
     def __str__(self):
         return self.order_id
 
-# Item Model - used mainly to showcase products and details to the end-user , in checkout process and to manage products in CMS
+# Item Model - used mainly to showcase products and details to the end-user,
+# in checkout process and to manage products in CMS
 
 
 class Item(models.Model):
@@ -109,27 +114,37 @@ class Item(models.Model):
     # receive a Base64 encoded image and save into ImageField
     uploadedImg = models.ImageField()
     category = models.CharField(
-        choices=CATEGORY_CHOICES, max_length=20, default="", blank=True, null=True)  # including CATEGORY_CHOICES
-    tag = models.CharField(choices=TAG_CHOICES,
-                           max_length=20, default="", blank=True, null=True)  # including TAG_CHOICES
+        choices=CATEGORY_CHOICES, max_length=20,
+        default="", blank=True, null=True)  # including CATEGORY_CHOICES
+    tag = models.CharField(choices=TAG_CHOICES, max_length=20,
+                           default="", blank=True, null=True)
+    # including TAG_CHOICES
     status = models.CharField(max_length=20,
-                              choices=STATUS_CHOICES, default='Order Created', null=True)  # including STATUS_CHOICES
+                              choices=STATUS_CHOICES,
+                              default='Order Created', null=True)
+    # including STATUS_CHOICES
 
 
 # generate string representations of the objects
 def __str__(self):
     return f'{self.id} {self.title}'
 
-# OrderItem Model - used mainly to showcase order and details of order and associated items in the order to the admin and user , in checkout process and to manage orders in CMS
+# OrderItem Model - used mainly to showcase order and details of order and
+# associated items in the order to the admin and user,
+# in checkout process and to manage orders in CMS
 
 
 class OrderItem(models.Model):
     order = models.ForeignKey(
-        Order, on_delete=models.CASCADE, null=True, related_name='items')  # linked to Order by means of the foreign key,  set a related_name argument on the relationship
+        Order, on_delete=models.CASCADE, null=True, related_name='items')
+    # linked to Order by means of the foreign key,
+    # set a related_name argument on the relationship
     item_id = models.ForeignKey(
         Item, on_delete=models.SET_NULL, null=True, related_name='orders')
     price = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     qty = models.IntegerField()
     total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
 
-# set on_delete=models.CASCADE on models which has ForeignKey field, so when the referenced object is deleted, also delete the objects that have references to it
+# set on_delete=models.CASCADE on models which has ForeignKey field,
+# so when the referenced object is deleted, also delete the objects that have
+# references to it

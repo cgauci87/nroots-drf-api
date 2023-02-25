@@ -13,7 +13,8 @@ from decimal import *
 from users.models import Address
 
 
-# Base64ImageField Serializer - decode image file - mainly used to upload product images
+# Base64ImageField Serializer - decode image file
+# mainly used to upload product images
 
 class Base64ImageField(serializers.ImageField):
 
@@ -26,7 +27,7 @@ class Base64ImageField(serializers.ImageField):
         if isinstance(data, six.string_types):
             if 'data:' in data and ';base64,' in data:
                 header, data = data.split(';base64,')
-             # Try to decode the file. Return validation error if it fails.
+            # Try to decode the file. Return validation error if it fails.
             try:
                 decoded_file = base64.b64decode(data)
             except TypeError:
@@ -39,7 +40,7 @@ class Base64ImageField(serializers.ImageField):
 
         return super(Base64ImageField, self).to_internal_value(data)
 
-    def get_file_extension(self, file_name, decoded_file):  # check file extension
+    def get_file_extension(self, file_name, decoded_file):  # check extension
         import imghdr
 
         extension = imghdr.what(file_name, decoded_file)
@@ -47,7 +48,8 @@ class Base64ImageField(serializers.ImageField):
 
         return extension
 
-# ProductSerializer for Item model using DecimalField for pricing/total to avoid precision issues
+# ProductSerializer for Item model using DecimalField for pricing/total
+# to avoid precision issues
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -59,7 +61,8 @@ class ProductSerializer(serializers.ModelSerializer):
     # an image representation for Base64ImageField, inherited from ImageField
     uploadedImg = Base64ImageField()
     created_at = serializers.DateTimeField(
-        format='%d/%m/%y %H:%M', required=False)  # timstamp in human readable format
+        format='%d/%m/%y %H:%M', required=False)
+    # timstamp in human readable format
 
     class Meta:
         model = Item
@@ -88,13 +91,15 @@ class OrderSerializer(serializers.ModelSerializer):
     checkout_type = serializers.CharField(required=False)
 
     created_at = serializers.DateTimeField(
-        format='%d/%m/%y %H:%M', required=False)  # timstamp in human readable format
+        format='%d/%m/%y %H:%M', required=False)
+    # timstamp in human readable format
 
     # visible field, but not editable by the user
     full_name = serializers.CharField(read_only=True)
 
     def create(self, validated_data):
-        # .pop searches for 'items' and returns and removes it if it is found, otherwise an exception is thrown.
+        # .pop searches for 'items' and returns and removes it if it is found,
+        # otherwise an exception is thrown.
         items = validated_data.pop('items')
         order = super().create(validated_data)
         qty = 0
@@ -111,7 +116,8 @@ class OrderSerializer(serializers.ModelSerializer):
                 user=user
             )
 
-        # a nested field on the serializer class (writable nested serialization)
+        # a nested field on the serializer class
+        # (writable nested serialization)
         for item_id in items:
             item_id['item_id'] = item_id['item_id'].pk
 
@@ -130,7 +136,8 @@ class OrderSerializer(serializers.ModelSerializer):
         order.price = total
         order.save()  # save order to database
 
-        # SEND ORDER SUMMARY EMAIL HERE (triggered automatically upon order submission)
+        # SEND ORDER SUMMARY EMAIL HERE
+        # (triggered automatically upon order submission)
 
         html_message = render_to_string(
             'order_summary.html', {'order': order})  # loads the template
@@ -138,11 +145,13 @@ class OrderSerializer(serializers.ModelSerializer):
         plain_message = strip_tags(html_message)
         subject = render_to_string(
             'order_summary_subject.txt',
-            {'order': order})  # loads the text file which contain the subject line
+            {'order': order})
+        # loads the text file which contain the subject line
 
         try:
             mail.send_mail(subject, plain_message, EMAIL_HOST_USER, [
-                order.email], html_message=html_message)  # Sending email by using the send_mail function (imported).
+                order.email], html_message=html_message)
+            # Sending email by using the send_mail function (imported).
         except Exception as e:
             print(e)  # print exception if email delivery not successful
 

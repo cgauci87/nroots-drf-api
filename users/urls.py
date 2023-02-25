@@ -5,7 +5,7 @@ from users.views import AddressViewSet
 
 app_name = "users"
 
-router = DefaultRouter() # DefaultRouter includes a default API root view
+router = DefaultRouter()  # DefaultRouter includes a default API root view
 router.register('user/profile/addresses', views.AddressViewSet)
 
 urlpatterns = [
@@ -19,4 +19,4 @@ urlpatterns = [
     path('reset-password', views.ChangeCurrentPasswordView.as_view()),
 ]
 
-urlpatterns += router.urls # append router.urls to the above list of views.
+urlpatterns += router.urls  # append router.urls to the above list of views.

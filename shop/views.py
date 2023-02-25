@@ -25,8 +25,10 @@ class CategoriesView(View):
             categories.append(c)
 
         payload = {'categories': categories}
-        # return the payload according to what values specified in the CATEGORY_CHOICES
-        return HttpResponse(json.dumps(payload), content_type='application/json')
+        # return the payload according to what values
+        # specified in the CATEGORY_CHOICES
+        return HttpResponse(json.dumps(payload),
+                            content_type='application/json')
 
 # TagsView for TAG_CHOICES
 
@@ -38,8 +40,9 @@ class TagsView(View):
             tags.append(t)
 
         payload = {'tags': tags}
-        # return the payload according to what values specified in the TAG_CHOICES
-        return HttpResponse(json.dumps(payload), content_type='application/json')
+        # return the payload according to what values specified in TAG_CHOICES
+        return HttpResponse(json.dumps(payload),
+                            content_type='application/json')
 
 # StatusesView for STATUS_CHOICES
 
@@ -51,26 +54,33 @@ class StatusesView(View):
             statuses.append(s)
 
         payload = {'statuses': statuses}
-        # return the payload according to what values specified in the STATUS_CHOICES
-        return HttpResponse(json.dumps(payload), content_type='application/json')
+        # return the payload
+        # values specified in STATUS_CHOICES
+        return HttpResponse(json.dumps(payload),
+                            content_type='application/json')
 
 
 class ContactView(APIView):
-    # post - when user submits contact us form - an email will be send with form contents to the user
+    # post - when user submits contact us form - an email will be send with
+    # form contents to the user
     def post(self, request):
         serializer = ContactSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializers.errors, status=400)
 
         html_message = render_to_string(
-            'contact_form.html', {'data': serializer.validated_data})  # data defined for the template and loads the template
+            'contact_form.html', {'data': serializer.validated_data})
+        # data defined for the template and loads the template
         # strip/remove HTML tags from an existing string
         plain_message = strip_tags(html_message)
-        recipient_list = [serializer.validated_data['email'], EMAIL_HOST_USER] # define email from serializer validated_data
+        # define email from serializer validated_data
+        recipient_list = [serializer.validated_data['email'], EMAIL_HOST_USER]
 
         try:
-            mail.send_mail("nRoots - Thank you for contacting us", plain_message, EMAIL_HOST_USER,
-                           recipient_list, html_message=html_message)  # loads the text file which contain the subject line
+            mail.send_mail("nRoots - Thank you for contacting us",
+                           plain_message, EMAIL_HOST_USER,
+                           recipient_list, html_message=html_message)
+            # loads the text file which contain the subject line
         except Exception as e:
             print(e)  # print exception if email delivery not successful
         return Response(status=200)

@@ -5,9 +5,11 @@ from django.conf import settings
 from django.middleware import csrf
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
-from rest_framework import exceptions as rest_exceptions, response, decorators as rest_decorators, permissions as rest_permissions
+from rest_framework import exceptions as rest_exceptions, response, \
+    decorators as rest_decorators, permissions as rest_permissions
 from rest_framework import permissions
-from rest_framework_simplejwt import tokens, views as jwt_views, serializers as jwt_serializers, exceptions as jwt_exceptions
+from rest_framework_simplejwt import tokens, views as jwt_views, \
+    serializers as jwt_serializers, exceptions as jwt_exceptions
 from django.http import JsonResponse
 from rest_framework.response import Response
 
@@ -71,7 +73,8 @@ def loginView(request):
         res.data = tokens
         res["X-CSRFToken"] = csrf.get_token(request)
         return res
-    # raise exception if user has entered incorrect email address or incorrect password or both
+    # raise exception if user has entered incorrect email address
+    # or incorrect password or both
     raise rest_exceptions.AuthenticationFailed(
         "Email or Password is incorrect!")
 
@@ -81,7 +84,8 @@ def loginView(request):
 @rest_decorators.api_view(["POST"])
 @rest_decorators.permission_classes([])
 def registerView(request):
-    #  deserializing data - call is_valid() before attempting to access the validated data
+    #  deserializing data - call is_valid() before attempting
+    #  to access the validated data
     serializer = serializers.RegistrationSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
 
@@ -114,7 +118,7 @@ def logoutView(request):
         res["X-CSRFToken"] = None
 
         return res
-    except:  # if token not found or doesn't match , raise parse error exception
+    except token.DoesNotExist:
         raise rest_exceptions.ParseError("Invalid token")
 
 # Cookie Token Refresh Serializer
@@ -137,7 +141,8 @@ class CookieTokenRefreshSerializer(jwt_serializers.TokenRefreshSerializer):
 
 class CookieTokenRefreshView(jwt_views.TokenRefreshView):
     serializer_class = CookieTokenRefreshSerializer
-    # If response would have the refresh object -  set values so to "refresh" the access token.
+    # If response would have the refresh object
+    # set values so to "refresh" the access token.
 
     def finalize_response(self, request, response, *args, **kwargs):
         if response.data.get("refresh"):
@@ -174,14 +179,15 @@ def userView(request):
 
 
 @rest_decorators.api_view(["GET"])
-@rest_decorators.permission_classes([rest_permissions.IsAuthenticatedOrReadOnly])
+@rest_decorators.permission_classes([rest_permissions.
+                                     IsAuthenticatedOrReadOnly])
 def userProfileView(request):
     try:  # Get objects from the account of current logged in user
         user = models.Account.objects.get(id=request.user.id)
     except models.Account.DoesNotExist:
         # if account does not exists, then raise exception 404
         return response.Response(status_code=404)
-     # if response is successful, return serialized data
+        # if response is successful, return serialized data
     serializer = serializers.AccountSerializer(user)
     return response.Response(serializer.data)
 
@@ -189,11 +195,13 @@ def userProfileView(request):
 
 
 class ForgotPassword(APIView):
-    # post - when user input his email address and hit submit to initiate the forgot password reset process
+    # post - when user input his email address and hit submit
+    # to initiate the forgot password reset process
     def post(self, request, *args, **kwargs):
         FRONTEND_URL = "https://nroots-react-frontend.herokuapp.com"
         user = models.Account.objects.filter(
-            email=request.data.get("email")).first()  # get email from the input of the user
+            email=request.data.get("email")).first()
+        # get email from the input of the user
         if user:
             token = str(uuid.uuid4().hex)  # generate token with uuid
             token = token.replace("=", "").replace("&", "")
@@ -209,22 +217,27 @@ class ForgotPassword(APIView):
             plain_message = strip_tags(html_message)
 
             try:
-                mail.send_mail("nRoots - Reset Your Account Password", plain_message, EMAIL_HOST_USER, [
-                               user.email], html_message=html_message)  # loads the text file which contain the subject line
+                mail.send_mail("nRoots - Reset Your Account Password",
+                               plain_message, EMAIL_HOST_USER, [
+                                   user.email], html_message=html_message)
+                # loads the text file which contain the subject line
             except Exception as e:
                 print(e)  # print exception if email delivery not successful
 
             print(url)
             response = {
-                'message': 'A password link has been sent to the registered email'}
+                'message':
+                    'A password link has been sent to the registered email'}
         return JsonResponse(response)  # return success response if successful
 
-    # patch - when user receieve the forgot password email and proceed to reset the password via the link with token that was provided.
+    # patch - when user receieve the forgot password email and proceed
+    # to reset the password via the link with token that was provided.
     def patch(self, request, *args, **kwargs):
-        if not "reset_token" in request.data:
+        if "reset_token" not in request.data:
             return response.Response(status_code=404)
         user = models.Account.objects.filter(
-            reset_password_token=request.data.get("reset_token")).first()  # Get the reset token from the url
+            reset_password_token=request.data.get("reset_token")).first()
+        # Get the reset token from the url
         if not user:
             # return exception if user invalid
             response.Response(status_code=404)
@@ -254,7 +267,8 @@ class ChangeCurrentPasswordView(APIView):
                 message=ResponseMessages.INVALID_PASSWORD,
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
-        if not request.data.get("new_password") == request.data.get("confirm_password"):
+        if not request.data.get("new_password") == request.data.get(
+                "confirm_password"):
             return self.send_response(
                 success=False,
                 message=ResponseMessages.PASSWORD_MISMATCH,

@@ -18,18 +18,21 @@ class ProductViewSet(ModelViewSet):
     # list, get, update/patch, delete
     model = Item
     serializer_class = ProductSerializer
-    # order by created_at (recent created products will display first in the list)
+    # order by created_at (recent created products will display first in list)
     queryset = Item.objects.all().order_by("-created_at")
     permission_classes = [IsAdminOrReadOnly]
     filter_backends = [
-        django_filters.rest_framework.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+        django_filters.rest_framework.DjangoFilterBackend,
+        filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['category', 'tag']
     search_fields = ['title', 'category', 'tag']
     ordering_fields = ['price', 'name', 'created_at', 'category', 'tag']
 
-    # using the action decorator with the detail flagged as False to return a list of objects
+    # using the action decorator with the detail flagged
+    # as False to return list of objects
 
-    @action(detail=False, methods=['DELETE'], permission_classes=[permissions.IsAdminUser])
+    @action(detail=False, methods=['DELETE'],
+            permission_classes=[permissions.IsAdminUser])
     def bulk_delete(self, request):
         ids = request.data
         # bulk deletion of multiple products
