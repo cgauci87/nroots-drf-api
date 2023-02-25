@@ -38,6 +38,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
+
 ALLOWED_HOSTS = [
     os.environ.get('ALLOWED_HOSTS'),
     'localhost',
@@ -56,17 +57,8 @@ else:
     ]
 
 
-if 'CLIENT_ORIGIN' in os.environ:
-    CORS_ALLOWED_ORIGINS = [
-        os.environ.get('CLIENT_ORIGIN'),
-        os.environ.get('CLIENT_ORIGIN_DEV')
-    ]
-
-else:
-    CORS_ALLOWED_ORIGIN_REGEXES = [
-        r"^https://.*\.gitpod\.io$",
-    ]
-
+CSRF_TRUSTED_ORIGINS = [
+    os.environ.get('CSRF_TRUSTED_ORIGINS')]
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -99,8 +91,6 @@ CORS_ALLOW_METHODS = [
 
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTP_ONLY = True
-CSRF_TRUSTED_ORIGINS = [
-    os.environ.get('CSRF_TRUSTED_ORIGINS')]
 CSRF_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SECURE = True
