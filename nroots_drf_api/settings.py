@@ -38,12 +38,35 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-
 ALLOWED_HOSTS = [
-    '8080-cgauci87-nrootsdrfapi-6m4oduklif1.ws-eu88.gitpod.io', '3000-cgauci87-nrootsreactfro-xe9zievui8t.ws-eu87.gitpod.io', 'nroots-drf-api.herokuapp.com', 'nroots-react-frontend.herokuapp.com']
+    os.environ.get('ALLOWED_HOSTS'),
+    'localhost',
+]
 
-CORS_ALLOWED_ORIGINS = ['https://8080-cgauci87-nrootsdrfapi-6m4oduklif1.ws-eu88.gitpod.io', 'https://3000-cgauci87-nrootsreactfro-xe9zievui8t.ws-eu87.gitpod.io',
-                        'https://nroots-drf-api.herokuapp.com', 'https://nroots-react-frontend.herokuapp.com']
+
+if 'CLIENT_ORIGIN' in os.environ:
+    CORS_ALLOWED_ORIGINS = [
+        os.environ.get('CLIENT_ORIGIN'),
+        os.environ.get('CLIENT_ORIGIN_DEV')
+    ]
+
+else:
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        r"^https://.*\.gitpod\.io$",
+    ]
+
+
+if 'CLIENT_ORIGIN' in os.environ:
+    CORS_ALLOWED_ORIGINS = [
+        os.environ.get('CLIENT_ORIGIN'),
+        os.environ.get('CLIENT_ORIGIN_DEV')
+    ]
+
+else:
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        r"^https://.*\.gitpod\.io$",
+    ]
+
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -77,7 +100,7 @@ CORS_ALLOW_METHODS = [
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTP_ONLY = True
 CSRF_TRUSTED_ORIGINS = [
-    '8080-cgauci87-nrootsdrfapi-6m4oduklif1.ws-eu88.gitpod.io', '3000-cgauci87-nrootsreactfro-xe9zievui8t.ws-eu87.gitpod.io', 'nroots-drf-api.herokuapp.com', 'nroots-react-frontend.herokuapp.com']
+    os.environ.get('CSRF_TRUSTED_ORIGINS')]
 CSRF_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SECURE = True
@@ -109,7 +132,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
-
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
