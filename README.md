@@ -35,25 +35,25 @@ Guest users would still be able to add/remove items to shopping cart and proceed
 
 This repository holds the Django Rest Framework (DRF) API database for the ReactJS frontend part of the project. 
 
-[Deployed DRF API (via Render)]()
+[Deployed DRF API (via Heroku)](https://nroots-drf-api.herokuapp.com/)
 
-[Deployed Front End]()
+[Deployed Front End (via Heroku)](https://nroots-react-frontend.herokuapp.com/)
 
-[Front End README.md]()
+[Front End README.md](https://github.com/cgauci87/nroots-react-frontend/blob/main/README.md)
 
-[Front End TESTS.md]()
+[Front End TESTS.md](https://github.com/cgauci87/nroots-react-frontend/blob/main/TESTS.md)
 
 
 ***
 
 # Database Schema - Entity Relationship Diagram
 
-![Entity Relationship Diagram]()
+![Entity Relationship Diagram](https://res.cloudinary.com/dgroams94/image/upload/v1677404150/readme_images/nroots-drf-api/erd_x13hqq.jpg)
 
 ***
 
 # Testing
-- All testing documentation can be found [here]()
+- All testing documentation can be found [here](/TESTS.md)
 
 ***
 
@@ -79,7 +79,7 @@ None identified
 
 ## Modules
 
-![Modules used](static/readme_images/modules_used.png)
+![Modules used](https://res.cloudinary.com/dgroams94/image/upload/v1677404622/readme_images/nroots-drf-api/modules_ahckkq.jpg)
 
 ## Languages
 - Python - The base language of the Django REST Framework
@@ -102,7 +102,7 @@ None identified
 
 ## Services 
 
-- [DrawSQLapp](https://drawsql.app/) - Development of database schema
+- [DBeaver](https://dbeaver.io/) - Development of database schema ER Diagram
 
 ## Resources
 - The Code Institute's DRF walkthrough was used as a guide on how to set up, build and deploy a DRF API. I customised existing models and created new ones as my confidence and knowledge grew. 
