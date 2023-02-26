@@ -16,7 +16,6 @@ urlpatterns = [
     path('user/', views.userView),
     path('user/profile/', views.userProfileView),
     path('forgot-password', views.ForgotPassword.as_view()),
-    path('reset-password', views.ChangeCurrentPasswordView.as_view()),
 ]
 
 urlpatterns += router.urls  # append router.urls to the above list of views.

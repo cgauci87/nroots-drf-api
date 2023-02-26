@@ -256,28 +256,6 @@ class ForgotPassword(APIView):
         return JsonResponse(response)
 
 
-class ChangeCurrentPasswordView(APIView):
-    # permission_classes = [IsAuthenticated]
-
-    def post(self, request, *args, **kwargs):
-        user = request.user
-        if not user.check_password(request.data.get("password")):
-            return self.send_response(
-                success=False,
-                message=ResponseMessages.INVALID_PASSWORD,
-                status_code=status.HTTP_401_UNAUTHORIZED,
-            )
-        if not request.data.get("new_password") == request.data.get(
-                "confirm_password"):
-            return self.send_response(
-                success=False,
-                message=ResponseMessages.PASSWORD_MISMATCH,
-                status_code=status.HTTP_401_UNAUTHORIZED,
-            )
-        user.set_password(request.data.get("new_password"))
-        user.save()
-        return self.send_success_response(message="Success")
-
 # AddressViewSet for Model Address
 
 
