@@ -202,6 +202,9 @@ class ForgotPassword(APIView):
         user = models.Account.objects.filter(
             email=request.data.get("email")).first()
         # get email from the input of the user
+        if not user:
+            # return exception if user invalid
+            response.Response(status_code=404)
         if user:
             token = str(uuid.uuid4().hex)  # generate token with uuid
             token = token.replace("=", "").replace("&", "")
