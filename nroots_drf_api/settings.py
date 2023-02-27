@@ -132,7 +132,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+#STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 ROOT_URLCONF = 'nroots_drf_api.urls'
 
@@ -174,7 +174,7 @@ else:
         'default': dj_database_url.parse(os.environ.get('DATABASE_URL')),
     }
 
-    DEBUG = False  # PRODUCTION
+    DEBUG = True  # PRODUCTION
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -216,6 +216,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = '/static/'
+
+DEBUG = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
