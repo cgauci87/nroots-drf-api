@@ -38,8 +38,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-DEBUG = False
-
 ALLOWED_HOSTS = [
     os.environ.get('ALLOWED_HOSTS'),
     'localhost',
@@ -106,10 +104,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'cloudinary_storage',
     'django.contrib.staticfiles',
+    'cloudinary_storage',
     'cloudinary',
-
     'rest_framework',
     'django_filters',
     "corsheaders",
@@ -138,7 +135,7 @@ ROOT_URLCONF = 'nroots_drf_api.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'staticfiles')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -166,7 +163,7 @@ if os.environ.get('DEVELOPMENT') == "True":
         }
     }
 
-    DEBUG = False  # DEVELOPMENT
+    DEBUG = True  # DEVELOPMENT
 else:
     # Heroku database PRODUCTION
     DATABASES = {
@@ -213,8 +210,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript,  Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
-STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+WHITENOISE_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -271,7 +269,7 @@ SIMPLE_JWT = {
     # This can be 'Lax', 'Strict', or None to disable the flag.
     # can be modified to Lax if CORS_ORIGIN_WHITELIST has both BE & FE urls
     # otherwise set to None
-    'AUTH_COOKIE_SAMESITE': "None",
+    'AUTH_COOKIE_SAMESITE': "Lax",
 }
 
 REST_FRAMEWORK = {
