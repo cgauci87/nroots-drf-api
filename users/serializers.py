@@ -116,8 +116,7 @@ class AddressSerializer(serializers.ModelSerializer):
             serializers.UniqueTogetherValidator(
                 queryset=model.objects.all(),
                 fields=('user', 'street_address', 'apartment_address', 'city'),
-                message=("The address already exists so it won't be saved \
-                         again")
+                message=("The address already exists so it won't be saved again")
             )
         ]
 
