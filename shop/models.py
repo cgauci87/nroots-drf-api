@@ -75,7 +75,7 @@ class Order(models.Model):
         # generate string representations of the objects
         return f'{self.id} {self.item}'
 
-    # decorator declare that it can be accessed like it's a regular property
+    # decorator declare that it can be accessed like it's a regular  property
     @property
     def full_name(self):  # returns a string with the user first and last name
         return f'{self.first_name} {self.last_name}'
