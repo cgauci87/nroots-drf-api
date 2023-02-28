@@ -2,9 +2,10 @@ from django.http.response import HttpResponse
 from rest_framework.response import Response
 import json
 from django.views.generic import View
+from shop.models import CATEGORY_CHOICES, TAG_CHOICES
+
 from rest_framework.views import APIView
 from shop.serializers import ContactSerializer
-
 
 from django.core.mail import send_mail
 from nroots_drf_api.settings import (
@@ -41,21 +42,6 @@ class TagsView(View):
 
         payload = {'tags': tags}
         # return the payload according to what values specified in TAG_CHOICES
-        return HttpResponse(json.dumps(payload),
-                            content_type='application/json')
-
-# StatusesView for STATUS_CHOICES
-
-
-class StatusesView(View):
-    def get(self, *args, **kwargs):
-        statuses = []
-        for s in STATUS_CHOICES:
-            statuses.append(s)
-
-        payload = {'statuses': statuses}
-        # return the payload
-        # values specified in STATUS_CHOICES
         return HttpResponse(json.dumps(payload),
                             content_type='application/json')
 

@@ -132,8 +132,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
-
 ROOT_URLCONF = 'nroots_drf_api.urls'
 
 TEMPLATES = [
