@@ -271,13 +271,8 @@ SIMPLE_JWT = {
     # This can be 'Lax', 'Strict', or None to disable the flag.
     # can be modified to Lax if CORS_ORIGIN_WHITELIST has both BE & FE urls
     # otherwise set to None
-    'AUTH_COOKIE_SAMESITE': "Lax",
+    'AUTH_COOKIE_SAMESITE': "None",
 }
-
-CORS_ORIGIN_WHITELIST = (
-    'https://heroku.com',
-    'https://gitpod.io',
-)
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
